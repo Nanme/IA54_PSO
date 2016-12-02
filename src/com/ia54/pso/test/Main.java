@@ -36,21 +36,26 @@ public class Main extends Application {
     	FunctionRastrigin rast = new FunctionRastrigin();
     	FunctionNoise noise = new FunctionNoise(400);
     	
-    	MapFunc map = new MapFunc(width,height,ack);
-   	//  MapFunc map = new MapFunc(width,height,ack, -3,10,-3,12);
-    	//MapFunc mapnoise = new MapFunc(width,height, noise);
+    //	MapFunc map = new MapFunc(width,height,ack);
+   	  MapFunc map = new MapFunc(width,height,alp, 0,3.14f,0,6.28f);
+    	MapFunc mapnoise = new MapFunc(width,height, noise);
     	
      	//MapFunc map = new MapFunc(600,600,weir, weir.interval2());
 		//MapFunc map = new MapFunc(600,600,alp, alp.interval2());   	
     	
     	//map.noise();
+    	System.out.println(alp.applyAsDouble(0.5f, 0.5f));
+    	System.out.println(map.getValue(0.5f, 0.5f));
+    	System.out.println(map.Max);
     	//map.fusion(mapnoise);
+    	System.out.println(map.getValue(0.5f, 0.5f));
+    	
     	//map.fusion(mapnoise,0.5);
 		
     	//float[] range = {0,25,0,25};
 		//map.addF(alp,range,0.5);
 		
-    	map.negatif();
+    	//map.negatif();
 
 		//map.calc(alp);
 		Image image = map.draw(contraste);
@@ -60,12 +65,13 @@ public class Main extends Application {
         ClipboardContent content = new ClipboardContent();
         content.putImage(image); // the image you want, as javafx.scene.image.Image
         clipboard.setContent(content);
-        
+       
 
         VBox root = new VBox(10, imageView);
         Scene scene = new Scene(root);
         primaryStage.setScene(scene);
         primaryStage.setTitle(rast.toString());
+//        primaryStage.setTitle( String.valueOf(verif));
         primaryStage.show();
         
  

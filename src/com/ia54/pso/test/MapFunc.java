@@ -1,4 +1,6 @@
-﻿import javafx.application.Application;
+﻿import java.util.Vector;
+
+import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelFormat;
 import javafx.scene.image.PixelWriter;
@@ -10,27 +12,57 @@ public class MapFunc {
 	int width;
 	int height;
 	public double Min = 1, Max = 2;
-	public double z[];
+	private double z[];
 	public WritableImage img;
+	Vector<funcParam> Function;
+	
+	
+	
+	public double getValue(float x,float y)
+	{
+		float X,Y;
+		double res = 0;
+		for(funcParam i:Function)
+		{
+			X = i.range[0] + (x/width)*(i.range[1]-i.range[0]);
+			Y = i.range[2] + (x/height)*(i.range[3]-i.range[2]);
+			res += i.func.applyAsDouble(X, Y) * i.Poids;
+		}
+		return res;
+	}
+//	
+//	public void setValue(double val, int x, int y)
+//	{
+//		z[x*width+y] = val;
+//			if(val < Min)
+//				Min = val;
+//			else if (val > Max)
+//				Max = val;
+//		
+//	}
 	
 	MapFunc(int width, int height){
+		Function = new Vector<funcParam>();
 		z = new double[width*height];
 		this.width = width;
 		this.height = height;
 	}
 	MapFunc(int width, int height,FunctionPSO fonctionMap){
+		Function = new Vector<funcParam>();
 		z = new double[width*height];
 		this.width = width;
 		this.height = height;
 		calc(fonctionMap);
 	}
 	MapFunc(int width, int height,FunctionPSO fonctionMap, float[] d){
+		Function = new Vector<funcParam>();
 		z = new double[width*height];
 		this.width = width;
 		this.height = height;
 		calc(fonctionMap,d);
 	}
 	MapFunc(int width, int height,FunctionPSO fonctionMap,float xrange,float Xrange, float yrange, float Yrange){
+		Function = new Vector<funcParam>();
 		z = new double[width*height];
 		this.width = width;
 		this.height = height;
@@ -54,6 +86,7 @@ public class MapFunc {
 	
 	public void fusion(MapFunc mp, double Poids)
 	{
+		Function.addAll(mp.Function);
 		if (mp.height == height && mp.width == width)
 		{
 			double k = (Max-Min) / (mp.Max - mp.Min)*Poids;
@@ -124,7 +157,7 @@ public class MapFunc {
     
 	private double[] calc(FunctionPSO fonctionMap,float xrange,float Xrange, float yrange, float Yrange,double Poids)
 	{	
-		
+		Function.add(new funcParam(fonctionMap, xrange, Xrange, yrange, Yrange ,  Poids));
 		Max = fonctionMap.applyAsDouble(Xrange,Yrange);
 		Min = fonctionMap.applyAsDouble(Xrange,Yrange);
 
@@ -188,6 +221,26 @@ public class MapFunc {
 		
 		return img;
 		//final ImageView imv = new ImageView();
+	}
+	
+	private class funcParam {
+		public FunctionPSO func;
+		public float[] range;
+		public double Poids;
+//		funcParam(FunctionPSO f, float[] range, double poids)
+//		{
+//			func = f;
+//			this.range = range;
+//			Poids = poids;
+//		}
+		
+		public funcParam(FunctionPSO fonctionMap, float xrange, float xrange2, float yrange, float yrange2,
+				double poids) {
+			func = fonctionMap;
+			Poids = poids;
+			range = new float[]{xrange, xrange2, yrange, yrange2};
+			
+		}
 	}
  
 }
