@@ -1,4 +1,4 @@
-import javafx.application.Application;
+﻿import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelFormat;
 import javafx.scene.image.PixelWriter;
@@ -57,11 +57,16 @@ public class MapFunc {
 		if (mp.height == height && mp.width == width)
 		{
 			double k = (Max-Min) / (mp.Max - mp.Min)*Poids;
+			Max = z[0] + mp.z[0]*k;
+			Min = Max;
 			for (int i = 0; i<width*height; ++i)
+			{
 				z[i] += mp.z[i]*k;
-			
-			Max += mp.Max*k;
-			Min += mp.Min*k;
+				if(z[i] < Min)
+					Min = z[i];
+				else if (z[i] > Max)
+					Max = z[i];
+			}
 				
 		}
 	}
@@ -186,3 +191,4 @@ public class MapFunc {
 	}
  
 }
+
