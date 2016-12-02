@@ -36,19 +36,22 @@ public class Main extends Application {
     	FunctionRastrigin rast = new FunctionRastrigin();
     	FunctionNoise noise = new FunctionNoise(400);
     	
-    //	MapFunc map = new MapFunc(width,height,ack);
-   	  MapFunc map = new MapFunc(width,height,alp, 0,3.14f,0,6.28f);
-    	MapFunc mapnoise = new MapFunc(width,height, noise);
+    	MapFunc map = new MapFunc(width,height,alp);
+   	//  MapFunc map = new MapFunc(width,height,alp, 0,3.14f,0,6.28f);
+ //   	MapFunc mapnoise = new MapFunc(width,height, noise);
     	
      	//MapFunc map = new MapFunc(600,600,weir, weir.interval2());
 		//MapFunc map = new MapFunc(600,600,alp, alp.interval2());   	
     	
     	//map.noise();
-    	System.out.println(alp.applyAsDouble(0.5f, 0.5f));
-    	System.out.println(map.getValue(0.5f, 0.5f));
-    	System.out.println(map.Max);
+    //	System.out.println(alp.applyAsDouble(0.5f, 0.5f));
+  // 	System.out.println(map.getValue(0.5f, 0.5f));
+    	System.out.println(map.getValue(map.Max.x, map.Max.y));
+    	System.out.println(map.Max.x);
+    	System.out.println(map.Max.y);
+    	System.out.println(map.Max.val);
     	//map.fusion(mapnoise);
-    	System.out.println(map.getValue(0.5f, 0.5f));
+   // 	System.out.println(map.getValue(0.5f, 0.5f));
     	
     	//map.fusion(mapnoise,0.5);
 		
