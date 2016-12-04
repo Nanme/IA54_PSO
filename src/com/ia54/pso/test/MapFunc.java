@@ -52,31 +52,28 @@ public class MapFunc {
 		z = new double[width*height];
 		this.width = width;
 		this.height = height;
-		calc(fonctionMap);
+		addF(fonctionMap);
 	}
 	MapFunc(int width, int height,FunctionPSO fonctionMap, float[] d){
 		
 		z = new double[width*height];
 		this.width = width;
 		this.height = height;
-		calc(fonctionMap,d);
+		addF(fonctionMap,d);
 	}
 	MapFunc(int width, int height,FunctionPSO fonctionMap,float xrange,float Xrange, float yrange, float Yrange){
 		
 		z = new double[width*height];
 		this.width = width;
 		this.height = height;
-		calc(fonctionMap, xrange, Xrange, yrange, Yrange);
+		addF(fonctionMap, xrange, Xrange, yrange, Yrange);
 	}
 	
 	public void negatif(){
-		for (int i = 0; i<width*height; ++i)
-		{
-			z[i] -= Min.val;
-			z[i] -= (Max.val-Min.val)/2;
-			z[i] *= -1;
-			z[i] += Min.val + (Max.val-Min.val)/2;
-		}
+
+		for (funcParam i:Function)
+			i.Poids *= -1;
+		calc();
 	}
 	
 	public void fusion(MapFunc mp)
@@ -86,21 +83,19 @@ public class MapFunc {
 	
 	public void fusion(MapFunc mp, double Poids)
 	{
-		Function.addAll(mp.Function);
+		
 		if (mp.height == height && mp.width == width)
 		{
+			
 			double k = (Max.val-Min.val) / (mp.Max.val - mp.Min.val)*Poids;
-			Max.val = z[0] + mp.z[0]*k;
-			Min.val = Max.val;
-			for (int i = 0; i<width*height; ++i)
-			{
-				z[i] += mp.z[i]*k;
-				if(z[i] < Min.val)
-					Min.set(Math.floorDiv(i, width), i%width, z[i]);
-				else if (z[i] > Max.val)
-					Max.set(Math.floorDiv(i, width), i%width, z[i]);
-			}
+			 
+			for(funcParam i:mp.Function) {
 				
+				Function.add(i.clone());
+				Function.lastElement().Poids *=k;
+			}
+			calc();
+		
 		}
 	}
 
@@ -128,59 +123,50 @@ public class MapFunc {
 	}
     
     public void addF(FunctionPSO fonctionMap,float xrange,float Xrange, float yrange, float Yrange,double Poids){
-    	calc(fonctionMap, xrange,Xrange, yrange, Yrange, Poids);
+    	Function.add(new funcParam(fonctionMap, xrange, Xrange, yrange, Yrange ,  Poids));
+    	calc();
+    	
+    }
+    public void addF(FunctionPSO fonctionMap,float xrange,float Xrange, float yrange, float Yrange){
+    	Function.add(new funcParam(fonctionMap, xrange, Xrange, yrange, Yrange ,  1));
+    	calc();
+    	
     }
     
     public void addF(FunctionPSO fonctionMap, float[] d,double Poids){
-    	calc(fonctionMap, d, Poids);
+    	Function.add(new funcParam(fonctionMap, d ,  Poids));
+    	calc();
     }
-    public double[] calc(FunctionPSO fonctionMap)
-	{
-    	return calc(fonctionMap, fonctionMap.interval());
-	}
+    public void addF(FunctionPSO fonctionMap, float[] d){
+    	Function.add(new funcParam(fonctionMap, d ,  1));
+    	calc();
+    }
 
-    public double[] calc(FunctionPSO fonctionMap, float[] d)
-	{
-    	return calc(fonctionMap, d[0],d[1],d[2], d[3]);
-	}
-    
-    private double[] calc(FunctionPSO fonctionMap, float[] d, double Poids)
- 	{
-     	return calc(fonctionMap, d[0],d[1],d[2], d[3],Poids);
- 	}
-
-    public double[] calc(FunctionPSO fonctionMap,float xrange,float Xrange, float yrange, float Yrange)
-    {
-    	return calc(fonctionMap, xrange,Xrange, yrange, Yrange,1);
+    public void addF(FunctionPSO fonctionMap){
+    	Function.add(new funcParam(fonctionMap, fonctionMap.interval() ,  1));
+    	calc();
     }
     
     
-	private double[] calc(FunctionPSO fonctionMap,float xrange,float Xrange, float yrange, float Yrange,double Poids)
+	private double[] calc()
 	{	
-		Function.add(new funcParam(fonctionMap, xrange, Xrange, yrange, Yrange ,  Poids));
-		Max.val = fonctionMap.applyAsDouble(Xrange,Yrange);
-		Min.val = fonctionMap.applyAsDouble(Xrange,Yrange);
+		
+		Max.val = getValue(0,0);
+		Min.val = getValue(0,0);
 
 		//int couleurNeutre = 0xFF_7F_7F_7F;
-		float x = xrange;
-		float y = yrange;
 		
 		int i = 0;
-		for (int u =0; u<width;  ++u )
+		for (int x =0; x<width;  ++x )
 		{
-			x += (Xrange-xrange)/width;
-			for(int v = 0; v<height; ++v)
+			for(int y = 0; y<height; ++y)
 			{
-				if(v == 0)
-					y = yrange;
-				else
-					y += (Yrange-yrange)/height;
-				z[i] += fonctionMap.applyAsDouble(x,y)*Poids;
+				z[i] = getValue(x,y);
 				
 				if(z[i] < Min.val)
-					Min.set(u, v, z[i]);
+					Min.set(x, y, z[i]);
 				else if (z[i] > Max.val)
-					Max.set(u, v, z[i]);
+					Max.set(x, y, z[i]);
 				++i;
 			}
 		}
@@ -199,15 +185,16 @@ public class MapFunc {
 		int[] pixels = new int[NBPIX] ;
 		
 		double k = 255/(Max.val-Min.val)*contrast; //facteur correcteur
+		double[] Z = new double[NBPIX];
 		
 		int Pg = 0x1_00, Pr = 0x1_00_00; //Pg : puissance pour atteindre le vert/green, Pr pour le rouge
 		for(int i = 0; i<NBPIX; ++i)
 		{
 			
-			z[i] = Math.round(k*(z[i]-Min.val)); // on passe dans un environnement [0..255]
-			if(z[i]>255 || z[i]<0)
-				System.out.println(z[i]);
-			pixels[i] =(int)(0xFF_00_00_00 + z[i]*Pr + z[i]*Pg + z[i]); 
+			Z[i] = Math.round(k*(z[i]-Min.val)); // on passe dans un environnement [0..255]
+			if(Z[i]>255 || Z[i]<0)
+				System.out.println(Z[i]);
+			pixels[i] =(int)(0xFF_00_00_00 + Z[i]*Pr + Z[i]*Pg + Z[i]); 
 								   // A			R		G		   B  : définition des couleurs ARGB
 			if (pixels[i] >0) pixels[i] = 0xFF_FF_FF_FF;
 			//pixels[(int) (Math.floor(Max.x)*width+Math.floor(Max.y))] = 0xFF_FF_00_00;
@@ -228,12 +215,12 @@ public class MapFunc {
 		public FunctionPSO func;
 		public float[] range;
 		public double Poids;
-//		funcParam(FunctionPSO f, float[] range, double poids)
-//		{
-//			func = f;
-//			this.range = range;
-//			Poids = poids;
-//		}
+		funcParam(FunctionPSO f, float[] range, double poids)
+		{
+			func = f;
+			this.range = range;
+			Poids = poids;
+		}
 		
 		public funcParam(FunctionPSO fonctionMap, float xrange, float xrange2, float yrange, float yrange2,
 				double poids) {
@@ -241,6 +228,10 @@ public class MapFunc {
 			Poids = poids;
 			range = new float[]{xrange, xrange2, yrange, yrange2};
 			
+		}
+		
+		public funcParam clone(){
+			return new funcParam(func,range,Poids);
 		}
 	}
  
