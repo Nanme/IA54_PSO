@@ -1,0 +1,70 @@
+import io.sarl.core.DefaultContextInteractions
+import io.sarl.core.Logging
+import io.sarl.core.Initialize
+import io.sarl.core.InnerContextAccess
+import io.sarl.core.Lifecycle
+import java.util.UUID
+import io.sarl.util.Scopes
+
+/**
+ * @author Vianney M
+ * Agent's behavior and associated functions
+ */
+
+event OptimumLocalFound{
+	var sol : Solution
+	new(x:float, y: float,z: double )
+	{
+		sol.x = x;
+		sol.y = y;
+		sol.^val =z;
+	}
+}
+
+agent HolonBoss{
+	uses DefaultContextInteractions, Logging
+
+	var solutionHolon : Solution 
+	
+	
+	on Initialize{
+		info("The boss is awake")
+		
+		//spawn(ResearchAgent,x,y,ID)
+		//va spawner les agents à des endroits définis ou non sur la map
+		
+	}
+	on OptimumLocalFound{
+		//on reception of a new optimum, the Holon checks if it is a global optimum:
+		info("Optimum Local Found at x:"+occurrence.sol.getX+", y:"+occurrence.sol.getY+" and the value is:"+occurrence.sol.getVal)
+		if (occurrence.sol.getVal>solutionHolon.getVal){
+			
+		}
+	}
+}
+
+agent ResearchAgent{
+	uses DefaultContextInteractions, Logging, InnerContextAccess, Lifecycle
+	var x: float
+	var y: float
+	var adresseHolon : UUID
+	var ValueFoundHere: Double
+	
+	
+	on Initialize{
+		if(occurrence.parameters.isEmpty){
+			info("Empty parameters")
+		} else{
+			x = Float.parseFloat(occurrence.parameters.get(0) as String)
+			y = Float.parseFloat(occurrence.parameters.get(1) as String)
+			adresseHolon = occurrence.parameters.get(2) as UUID
+		}
+		
+		
+		//TODO research function goes here
+		
+		
+		//when a local optimum is found by the agent, he sends the message to his boss:
+		emit(new OptimumLocalFound(x,y,ValueFoundHere), Scopes.addresses(defaultSpace.getAddress(adresseHolon)))	
+	}	
+}
