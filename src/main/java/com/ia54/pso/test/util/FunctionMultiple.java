@@ -5,7 +5,7 @@ import java.util.Vector;
 import com.ia54.pso.test.MapFunc;
 
 
-public class FunctionMultiple {
+public class FunctionMultiple implements FunctionPSO {
 
 
 	float height,width;
@@ -110,5 +110,27 @@ public class FunctionMultiple {
 			return new funcParam(func,range,Poids);
 		}
 	}
+
+	@Override
+	public double applyAsDouble(Float x, Float y) {
+		return getValue(x,y);
+	}
+
+	@Override
+	public float[] interval() {
+		return new float[]{0,600,0,600};
+	}
+
+	@Override
+	public float[] interval2() {
+		return null;
+	}
+	
+	@Override
+	public String toString()
+	{
+		return "heu .. blblbl ?";
+	}
+	
 
 }
