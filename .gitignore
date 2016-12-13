@@ -20,6 +20,7 @@ hs_err_pid*
 /sre/io.janusproject/io.janusproject.plugin/about.mappings
 /eclipse-products/io.sarl.lang.updatesite/io.sarl.lang.product.copy
 
+
 # Xtext generated files
 eclipse-sarl/plugins/io.sarl.core/xtend-gen/
 eclipse-sarl/plugins/io.sarl.core/src-gen/
@@ -45,6 +46,10 @@ eclipse-sarl/tests/io.sarl.lang.tests/src/main/xtend-gen/
 eclipse-sarl/tests/io.sarl.lang.tests/src/main/generated-sources/
 eclipse-sarl/tests/io.sarl.lang.tests/src/test/xtend-gen/
 eclipse-sarl/tests/io.sarl.lang.tests/src/test/generated-sources/
+/src/main/generated-sources/
+src/main/generated-sources/
+/src/main/generated-sources/*
+src/main/generated-sources/*
 
 # Xtext templates
 *.xml_gen
