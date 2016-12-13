@@ -1,4 +1,4 @@
-package com.ia54.pso.test.gui;
+package main.java.com.ia54.pso.test.gui;
 
 import io.janusproject.Boot;
 import javafx.application.Application;

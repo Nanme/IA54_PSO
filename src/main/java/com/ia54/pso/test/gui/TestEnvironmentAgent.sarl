@@ -1,7 +1,7 @@
 /** 
  * 
  */
-package com.ia54.pso.test.gui
+package main.java.com.ia54.pso.test.gui
 
 import io.sarl.core.DefaultContextInteractions
 import io.sarl.core.Initialize

@@ -1,31 +1,19 @@
-package com.ia54.pso.test;
+package main.java.com.ia54.pso.test;
 
 import javafx.application.Application;
-import javafx.geometry.Insets;
-import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.scene.image.*;
-
-import java.lang.Math;
-
-import com.ia54.pso.test.util.FunctionAckley;
-import com.ia54.pso.test.util.FunctionAlpine;
-import com.ia54.pso.test.util.FunctionNocon_rastrigin;
-import com.ia54.pso.test.util.FunctionNoise;
-import com.ia54.pso.test.util.FunctionRastrigin;
-import com.ia54.pso.test.util.FunctionWeierstrass;
-
-import javafx.stage.Stage;
+import main.java.com.ia54.pso.test.util.FunctionAckley;
+import main.java.com.ia54.pso.test.util.FunctionAlpine;
+import main.java.com.ia54.pso.test.util.FunctionNocon_rastrigin;
+import main.java.com.ia54.pso.test.util.FunctionNoise;
+import main.java.com.ia54.pso.test.util.FunctionRastrigin;
+import main.java.com.ia54.pso.test.util.FunctionWeierstrass;
 
 
 

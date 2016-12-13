@@ -1,4 +1,4 @@
-package com.ia54.pso.test;
+package main.java.com.ia54.pso.test;
 
 public class Solution {
 	public float x;
