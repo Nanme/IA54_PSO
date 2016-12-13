@@ -11,12 +11,13 @@ import javafx.stage.Stage;
 
 public class MainFrame extends Application {
 
-	public Rectangle rect = new Rectangle(0,0,1,1);
+	public Rectangle rect = new Rectangle(50,50,2,2);
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		Group root = new Group();
 		Scene scene = new Scene(root);
+		
 		root.getChildren().add(rect);
 		rect.xProperty().addListener(new ChangeListener<Number>() {
 
@@ -39,7 +40,8 @@ public class MainFrame extends Application {
 		Boot.startJanus((Class) null, BootTestEnvironmentAgent.class, this);
 		
 		primaryStage.setScene(scene);
-		primaryStage.setFullScreen(true);
+		primaryStage.setHeight(400);
+		primaryStage.setWidth(600);
 		primaryStage.show();
 
 	}
