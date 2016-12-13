@@ -27,10 +27,10 @@ import javafx.stage.Stage
  }
  
  event Move {
- 	var x : int
- 	var y : int
+ 	var x : float
+ 	var y : float
 	
-	new(i : int, j : int) {
+	new(i : float, j : float) {
 		this.x = i
 		this.y = j
 	}
@@ -39,26 +39,27 @@ import javafx.stage.Stage
  
  event Moved
  
-agent TestEnvironmentAgent {
+agent BootTestEnvironmentAgent {
 
-	uses DefaultContextInteractions, Lifecycle
+	uses DefaultContextInteractions, Lifecycle, Logging
 	
 	var mainFrame : MainFrame
 	var agt : UUID
 	
 	on Initialize {
-		this.mainFrame = new MainFrame()
-		this.mainFrame.start(new Stage());
+		this.mainFrame = occurrence.parameters.get(0) as MainFrame
 		spawn(TestGuiAgent, "0", "0")
 	}
 	
 	on Hello {
+		info("Hi !")
 		emit(new FrameInitialize(this.mainFrame))
 		emit(new Move(1, 2))
 	}
 	
 	on Moved {
-		emit(new Move(1,2))
+		info("Agent : Move !")
+		emit(new Move(0.001f,0.002f))
 	}
 	
 }
@@ -83,7 +84,7 @@ agent TestGuiAgent {
 			x = new SimpleFloatProperty(Float.parseFloat(xStr))
 			y = new SimpleFloatProperty(Float.parseFloat(yStr))
 		}
-
+		info("Hello !")
 		emit(new Hello)
 	}
 	
@@ -95,6 +96,7 @@ agent TestGuiAgent {
 	on Move {
 		x.value = x.value + occurrence.x
 		y.value = y.value + occurrence.y
+		info("I move !")
 		emit(new Moved)
 	}
 
