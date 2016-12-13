@@ -2,8 +2,6 @@ package com.ia54.pso.test.util;
 
 import java.util.Vector;
 
-import com.ia54.pso.test.MapFunc;
-
 
 public class FunctionMultiple implements FunctionPSO {
 

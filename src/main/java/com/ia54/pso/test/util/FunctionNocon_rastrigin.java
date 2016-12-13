@@ -1,9 +1,9 @@
 package com.ia54.pso.test.util;
 
-import java.util.function.ToDoubleBiFunction;
+
 
 public class FunctionNocon_rastrigin implements FunctionPSO {
-private static double z = 0;
+	
 	@Override
 	public double applyAsDouble(Float x, Float y) {
 		float temp1, temp2;
