@@ -1,3 +1,4 @@
+package com.ia54.pso.test;
 
 public class Solution {
 	public float x;

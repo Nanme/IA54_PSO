@@ -1,3 +1,5 @@
+package com.ia54.pso.test;
+
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Group;
@@ -15,6 +17,13 @@ import javafx.stage.Stage;
 import javafx.scene.image.*;
 
 import java.lang.Math;
+
+import com.ia54.pso.test.util.FunctionAckley;
+import com.ia54.pso.test.util.FunctionAlpine;
+import com.ia54.pso.test.util.FunctionNocon_rastrigin;
+import com.ia54.pso.test.util.FunctionNoise;
+import com.ia54.pso.test.util.FunctionRastrigin;
+import com.ia54.pso.test.util.FunctionWeierstrass;
 
 import javafx.stage.Stage;
 

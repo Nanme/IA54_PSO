@@ -1,3 +1,5 @@
+package com.ia54.pso.test.util;
+
 import java.util.function.ToDoubleBiFunction;
 
 import com.sun.xml.internal.bind.v2.runtime.RuntimeUtil.ToStringAdapter;

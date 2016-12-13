@@ -1,4 +1,9 @@
-﻿import java.util.Vector;
+﻿package com.ia54.pso.test;
+
+import java.util.Vector;
+
+import com.ia54.pso.test.util.FunctionNoise;
+import com.ia54.pso.test.util.FunctionPSO;
 
 import javafx.application.Application;
 import javafx.scene.image.Image;

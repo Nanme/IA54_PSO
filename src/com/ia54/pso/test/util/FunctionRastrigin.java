@@ -1,3 +1,4 @@
+package com.ia54.pso.test.util;
 
 public class FunctionRastrigin implements FunctionPSO {
 

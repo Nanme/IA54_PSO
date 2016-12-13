@@ -1,3 +1,5 @@
+package com.ia54.pso.test.util;
+
 import java.util.function.ToDoubleBiFunction;
 
 public class FunctionNocon_rastrigin implements FunctionPSO {

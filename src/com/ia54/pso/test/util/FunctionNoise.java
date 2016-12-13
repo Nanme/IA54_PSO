@@ -1,4 +1,4 @@
-
+package com.ia54.pso.test.util;
 
 public class FunctionNoise implements FunctionPSO {
 	double frequency;
@@ -6,7 +6,7 @@ public class FunctionNoise implements FunctionPSO {
 		frequency = 10.0 /125;
 	}
 	
-	FunctionNoise(float frequence) {
+	public FunctionNoise(float frequence) {
 		frequency = 10.0 /frequence;
 	}
 	@Override
