@@ -1,8 +1,10 @@
 package main.java.com.ia54.pso.test.util;
 
 public class FunctionNoise implements FunctionPSO {
-	double frequency;
-	FunctionNoise() {
+	
+	private double frequency;
+	
+	public FunctionNoise() {
 		frequency = 10.0 /125;
 	}
 	
@@ -27,7 +29,7 @@ public class FunctionNoise implements FunctionPSO {
 		return null;
 	}
 	
-    static public double noise(double d, double e, double z) {
+    public static double noise(double d, double e, double z) {
         int X = (int)Math.floor(d) & 255,                  // FIND UNIT CUBE THAT
             Y = (int)Math.floor(e) & 255,                  // CONTAINS POINT.
             Z = (int)Math.floor(z) & 255;
@@ -50,17 +52,18 @@ public class FunctionNoise implements FunctionPSO {
                                        grad(p[BB+1], d-1, e-1, z-1 ))))*25;
      }
     
-     static double fade(double t) { return t * t * t * (t * (t * 6 - 15) + 10); }
+    public static double fade(double t) { return t * t * t * (t * (t * 6 - 15) + 10); }
      
-     static double lerp(double t, double a, double b) { return a + t * (b - a); }
+    public static double lerp(double t, double a, double b) { return a + t * (b - a); }
      
-     static double grad(int hash, double x, double y, double z) {
+    public static double grad(int hash, double x, double y, double z) {
         int h = hash & 15;                      // CONVERT LO 4 BITS OF HASH CODE
         double u = h<8 ? x : y,                 // INTO 12 GRADIENT DIRECTIONS.
                v = h<4 ? y : h==12||h==14 ? x : z;
         return ((h&1) == 0 ? u : -u) + ((h&2) == 0 ? v : -v);
      }
-     static final int p[] = new int[512], permutation[] = { 151,160,137,91,90,15,
+    
+    private static final int p[] = new int[512], permutation[] = { 151,160,137,91,90,15,
      131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,8,99,37,240,21,10,23,
      190, 6,148,247,120,234,75,0,26,197,62,94,252,219,203,117,35,11,32,57,177,33,
      88,237,149,56,87,174,20,125,136,171,168, 68,175,74,165,71,134,139,48,27,166,

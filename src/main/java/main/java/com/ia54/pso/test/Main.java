@@ -22,7 +22,7 @@ public class Main extends Application {
 	
     public void start(Stage primaryStage) {
 
-    	int width = 600, height = 600;
+    	int width = 600, height = 100;
     	float contraste = 1f;
     	
     	
@@ -33,14 +33,15 @@ public class Main extends Application {
     	FunctionRastrigin rast = new FunctionRastrigin();
     	FunctionNoise noise = new FunctionNoise(400);
     	
-    	MapFunc map = new MapFunc(width,height,rast);
+    	MapFunc map = new MapFunc(width,height,ack);
+    	
    	  //MapFunc map = new MapFunc(width,height,weir, 0,0.002f,0,0.002f);
  //   	MapFunc mapnoise = new MapFunc(width,height, noise);
     	
      	//MapFunc map = new MapFunc(600,600,weir, weir.interval2());
 		//MapFunc map = new MapFunc(600,600,alp, alp.interval2());   	
     	
-    	map.noise();
+    	//map.noise();
     //	System.out.println(alp.applyAsDouble(0.5f, 0.5f));
   // 	System.out.println(map.getValue(0.5f, 0.5f));
     	System.out.println("min");

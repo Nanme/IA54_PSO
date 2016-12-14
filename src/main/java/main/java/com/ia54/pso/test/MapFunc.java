@@ -24,7 +24,7 @@ public class MapFunc {
 	{
 		return Function.getValue(x, y);
 	}
-//	
+
 //	public void setValue(double val, int x, int y)
 //	{
 //		z[x*width+y] = val;
@@ -35,13 +35,13 @@ public class MapFunc {
 //		
 //	}
 	
-	MapFunc(int width, int height){
+	public MapFunc(int width, int height){
 		Function = new FunctionMultiple(width, height);
 		z = new double[width*height];
 		this.width = width;
 		this.height = height;
 	}
-	MapFunc(int width, int height,FunctionPSO fonctionMap){
+	public MapFunc(int width, int height,FunctionPSO fonctionMap){
 		Function = new FunctionMultiple(width, height);
 		
 		z = new double[width*height];
@@ -49,7 +49,7 @@ public class MapFunc {
 		this.height = height;
 		addF(fonctionMap);
 	}
-	MapFunc(int width, int height,FunctionPSO fonctionMap, float[] d){
+	public MapFunc(int width, int height,FunctionPSO fonctionMap, float[] d){
 		Function = new FunctionMultiple(width, height);
 		
 		z = new double[width*height];
@@ -57,7 +57,7 @@ public class MapFunc {
 		this.height = height;
 		addF(fonctionMap,d);
 	}
-	MapFunc(int width, int height,FunctionPSO fonctionMap,float xrange,float Xrange, float yrange, float Yrange){
+	public MapFunc(int width, int height,FunctionPSO fonctionMap,float xrange,float Xrange, float yrange, float Yrange){
 		Function = new FunctionMultiple(width, height);
 		
 		z = new double[width*height];
@@ -158,9 +158,9 @@ public class MapFunc {
 		//int couleurNeutre = 0xFF_7F_7F_7F;
 		
 		int i = 0;
-		for (int x =0; x<width;  ++x )
+		for (int x =0; x<height;  ++x )
 		{
-			for(int y = 0; y<height; ++y)
+			for(int y = 0; y<width; ++y)
 			{
 				z[i] = getValue(x,y);
 				
@@ -181,7 +181,7 @@ public class MapFunc {
 	}
 				
 	public Image draw(double contrast)
-	{System.out.print(0xFF_00_00_00);
+	{
 		int NBPIX = width*height;
 		int[] pixels = new int[NBPIX] ;
 		
@@ -209,7 +209,7 @@ public class MapFunc {
 	
 		
 		return img;
-		//final ImageView imv = new ImageView();
+		
 	}
 	
 

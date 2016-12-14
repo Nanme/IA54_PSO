@@ -1,24 +1,39 @@
 package main.java.com.ia54.pso.test.gui;
 
+
 import io.janusproject.Boot;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import main.java.com.ia54.pso.test.MapFunc;
+import main.java.com.ia54.pso.test.util.FunctionAlpine;
+
 
 public class MainFrame extends Application {
-
+	
 	public Rectangle rect = new Rectangle(50,50,2,2);
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		
+    	FunctionAlpine alp = new FunctionAlpine();
+		MapFunc map = new MapFunc(600, 400, alp, 0,60,0,40);
+		map.noise();
+		Image img = map.draw();
+		ImageView imageView = new ImageView(img);
+
+		Boot.startJanus((Class) null, BootTestEnvironmentAgent.class, this);
+    	
 		Group root = new Group();
 		Scene scene = new Scene(root);
 		
-		root.getChildren().add(rect);
 		rect.xProperty().addListener(new ChangeListener<Number>() {
 
 			@Override
@@ -27,7 +42,6 @@ public class MainFrame extends Application {
 				
 			}
 		});
-		
 		rect.yProperty().addListener(new ChangeListener<Number>() {
 
 			@Override
@@ -36,14 +50,16 @@ public class MainFrame extends Application {
 				
 			}
 		});
-	
-		Boot.startJanus((Class) null, BootTestEnvironmentAgent.class, this);
+		rect.setFill(Color.RED);
+		
+		
+		root.getChildren().add(imageView);
+		root.getChildren().add(rect);
 		
 		primaryStage.setScene(scene);
 		primaryStage.setHeight(400);
 		primaryStage.setWidth(600);
-		primaryStage.show();
-
+		primaryStage.show();		
 	}
 
 	public static void main(String[] args) {

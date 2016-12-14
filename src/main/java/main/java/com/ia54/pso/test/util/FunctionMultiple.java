@@ -6,25 +6,25 @@ import java.util.Vector;
 public class FunctionMultiple implements FunctionPSO {
 
 
-	float height,width;
+	private float width,height;
 	
 	
-	public Vector<funcParam> Function = new Vector<funcParam>();
+	public Vector<FuncParam> Function = new Vector<FuncParam>();
 	
-	FunctionMultiple(float[] d)
+	public FunctionMultiple(float[] d)
 	{
-		this.height =  Math.abs(d[1] - d[0]);
-		this.width =  Math.abs(d[3] - d[2]);
+		this.width =  Math.abs(d[1] - d[0]);
+		this.height =  Math.abs(d[3] - d[2]);
 	}
 	
 	public FunctionMultiple(float x1, float x2, float y1, float y2)
 	{
-		this.height =  Math.abs(x2 - x1);
-		this.width =  Math.abs(y2 - y1);
+		this.width =  Math.abs(x2 - x1);
+		this.height =  Math.abs(y2 - y1);
 	}
 	
 	
-	public FunctionMultiple(float height, float width)
+	public FunctionMultiple(float width, float height)
 	{
 		this.height = height;
 		this.width = width;
@@ -34,79 +34,53 @@ public class FunctionMultiple implements FunctionPSO {
 	public double getValue(Float x, Float y) {
 		float X,Y;
 		double res = 0;
-		for(funcParam i:Function)
+		for(FuncParam i:Function)
 		{
-			X = i.range[0] + (x/(width-1))*(i.range[1]-i.range[0]);
-			Y = i.range[2] + (y/(height-1))*(i.range[3]-i.range[2]);
+			X = i.range[0] + (x/(width))*Math.abs(i.range[1]-i.range[0]);
+			Y = i.range[2] + (y/(height))*Math.abs(i.range[3]-i.range[2]);
 			res += i.func.applyAsDouble(X, Y) * i.Poids;
 		}
 		return res;
 	}
 	
     public void add(FunctionPSO fonctionMap, float[] d){
-    	Function.add(new funcParam(fonctionMap, d ,  1));
+    	Function.add(new FuncParam(fonctionMap, d ,  1));
     }
 	
 	public void add(FunctionPSO fonctionMap){
-	    	Function.add(new funcParam(fonctionMap, fonctionMap.interval() ,  1));
+	    	Function.add(new FuncParam(fonctionMap, fonctionMap.interval() ,  1));
 	}
 	
     public void add(FunctionPSO fonctionMap, float[] d,double Poids){
-    	Function.add(new funcParam(fonctionMap, d ,  Poids));
+    	Function.add(new FuncParam(fonctionMap, d ,  Poids));
     }
     
     public void add(FunctionPSO fonctionMap,float xrange,float Xrange, float yrange, float Yrange,double Poids){
-    	Function.add(new funcParam(fonctionMap, xrange, Xrange, yrange, Yrange ,  Poids));
+    	Function.add(new FuncParam(fonctionMap, xrange, Xrange, yrange, Yrange ,  Poids));
     }
     public void add(FunctionPSO fonctionMap,float xrange,float Xrange, float yrange, float Yrange){
-    	Function.add(new funcParam(fonctionMap, xrange, Xrange, yrange, Yrange ,  1));
+    	Function.add(new FuncParam(fonctionMap, xrange, Xrange, yrange, Yrange ,  1));
     }
     
     
-	public void add(funcParam f)
+	public void add(FuncParam f)
 	{
 		Function.add(f);
 	}
 	
 	public void fusion(FunctionMultiple mp, double Poids)
 	{
-		for(funcParam i:mp.Function) {
+		for(FuncParam i:mp.Function) {
 			
 			Function.add(i.clone());
 			Function.lastElement().Poids *=Poids;
 		}
 	}
-
-
 	
 	public void negatif(){
 
-		for (funcParam i:Function)
+		for (FuncParam i:Function)
 			i.Poids *= -1;
-	}
-	
-	private class funcParam {
-		public FunctionPSO func;
-		public float[] range;
-		public double Poids;
-		funcParam(FunctionPSO f, float[] range, double poids)
-		{
-			func = f;
-			this.range = range;
-			Poids = poids;
-		}
-		
-		public funcParam(FunctionPSO fonctionMap, float xrange, float xrange2, float yrange, float yrange2,
-				double poids) {
-			func = fonctionMap;
-			Poids = poids;
-			range = new float[]{xrange, xrange2, yrange, yrange2};
-			
-		}
-		
-		public funcParam clone(){
-			return new funcParam(func,range,Poids);
-		}
 	}
 
 	@Override
@@ -130,5 +104,30 @@ public class FunctionMultiple implements FunctionPSO {
 		return "heu .. blblbl ?";
 	}
 	
+	private class FuncParam {
+		
+		public FunctionPSO func;
+		public float[] range;
+		public double Poids;
+		
+		private FuncParam(FunctionPSO f, float[] range, double poids)
+		{
+			func = f;
+			this.range = range;
+			Poids = poids;
+		}
+		
+		public FuncParam(FunctionPSO fonctionMap, float xrange, float xrange2, float yrange, float yrange2,
+				double poids) {
+			func = fonctionMap;
+			Poids = poids;
+			range = new float[]{xrange, xrange2, yrange, yrange2};
+			
+		}
+		
+		public FuncParam clone(){
+			return new FuncParam(func,range,Poids);
+		}
+	}
 
 }
