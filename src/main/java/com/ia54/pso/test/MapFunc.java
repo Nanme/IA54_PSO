@@ -11,6 +11,7 @@ import main.java.com.ia54.pso.test.util.FunctionPSO;
 
 
 public class MapFunc {
+	
 	int width;
 	int height;
 	public Solution Min = new Solution(), Max = new Solution();
