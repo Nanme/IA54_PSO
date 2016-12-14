@@ -35,13 +35,13 @@ public class MapFunc {
 //		
 //	}
 	
-	MapFunc(int width, int height){
+	public MapFunc(int width, int height){
 		Function = new FunctionMultiple(width, height);
 		z = new double[width*height];
 		this.width = width;
 		this.height = height;
 	}
-	MapFunc(int width, int height,FunctionPSO fonctionMap){
+	public MapFunc(int width, int height,FunctionPSO fonctionMap){
 		Function = new FunctionMultiple(width, height);
 		
 		z = new double[width*height];
@@ -49,7 +49,7 @@ public class MapFunc {
 		this.height = height;
 		addF(fonctionMap);
 	}
-	MapFunc(int width, int height,FunctionPSO fonctionMap, float[] d){
+	public MapFunc(int width, int height,FunctionPSO fonctionMap, float[] d){
 		Function = new FunctionMultiple(width, height);
 		
 		z = new double[width*height];
@@ -57,7 +57,7 @@ public class MapFunc {
 		this.height = height;
 		addF(fonctionMap,d);
 	}
-	MapFunc(int width, int height,FunctionPSO fonctionMap,float xrange,float Xrange, float yrange, float Yrange){
+	public MapFunc(int width, int height,FunctionPSO fonctionMap,float xrange,float Xrange, float yrange, float Yrange){
 		Function = new FunctionMultiple(width, height);
 		
 		z = new double[width*height];

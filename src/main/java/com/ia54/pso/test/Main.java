@@ -34,6 +34,7 @@ public class Main extends Application {
     	FunctionNoise noise = new FunctionNoise(400);
     	
     	MapFunc map = new MapFunc(width,height,rast);
+    	
    	  //MapFunc map = new MapFunc(width,height,weir, 0,0.002f,0,0.002f);
  //   	MapFunc mapnoise = new MapFunc(width,height, noise);
     	
