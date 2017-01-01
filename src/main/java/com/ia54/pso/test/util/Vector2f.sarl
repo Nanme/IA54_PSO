@@ -1,0 +1,66 @@
+package main.java.com.ia54.pso.test.util
+
+public class Vector2f {
+	var x : Float;
+	var y : Float;
+
+	new {
+		this.x = 0f;
+		this.y= 0f;
+	}
+
+	new (x : Float, y : Float){
+		this.x = x;
+		this.y = y;
+	}
+	
+	def getX() : Float {
+		return this.x
+	}
+	
+	def getY() : Float {
+		return this.y
+	}
+
+	def normalize(){
+		var norm = Math.sqrt(x**2 + y**2) as float;
+		this.x = x / norm;
+		this.y = x / norm;
+	}
+	
+	def getNorm() : double {
+		return Math.sqrt(x**2 + y**2);
+	}
+	
+	def getSquareNorm() : double {
+		return x**2 + y**2
+	}
+	
+	def operator_plus(b : Vector2f) : Vector2f {
+		return new Vector2f(this.x + b.x, this.y + b.y)
+	}
+	
+	def operator_minus(a : Vector2f, b : Vector2f) : Vector2f {
+		return new Vector2f(a.x - b.x, a.y - b.y)
+	}
+	
+	def operator_minus(a : Vector2f) : Vector2f{
+		return new Vector2f(-a.x, -a.y)
+	}
+
+	def operator_multiply(cte : float) : Vector2f {
+		return new Vector2f(cte * this.x, cte * this.y)
+	}
+
+	def operator_equals(a : Vector2f, b : Vector2f) : boolean {
+		return (a.x == b.x) && (a.y == b.y)
+	}
+
+	def operator_notEquals(a : Vector2f, b : Vector2f) : boolean{
+		return !(a == b)
+	}
+	
+	def toString() : String {
+		return "(" + this.x + ", " + this.y + ")"
+	}
+}

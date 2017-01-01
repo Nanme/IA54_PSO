@@ -1,0 +1,42 @@
+package main.java.com.ia54.pso.test.util
+
+class Solution {
+	
+	var position : Vector2f
+	var value : double
+	
+	new(){
+		this.position = new Vector2f();
+		this.value = 0d
+	}
+	
+	new(x : Float, y : Float, value : double){
+		this.position = new Vector2f(x, y)
+		this.value = value
+	}
+	
+	new(position : Vector2f, value : double){
+		this.position = position
+		this.value = value
+	}
+	
+	def getValue() : double {
+		return this.value
+	}
+	
+	def getPosition() : Vector2f {
+		return this.position;
+	}
+	
+	def getX() : Float {
+		return position.x
+	}
+	
+	def getY() : Float {
+		return position.y
+	}
+	
+	def toString : String{
+		return "Solution : [" + position + ", " + value + "]" 
+	}
+}
