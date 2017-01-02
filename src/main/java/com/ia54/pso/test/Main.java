@@ -1,4 +1,11 @@
-package main.java.com.ia54.pso.test;
+package com.ia54.pso.test;
+
+import com.ia54.pso.test.util.FunctionAckley;
+import com.ia54.pso.test.util.FunctionAlpine;
+import com.ia54.pso.test.util.FunctionNocon_rastrigin;
+import com.ia54.pso.test.util.FunctionNoise;
+import com.ia54.pso.test.util.FunctionRastrigin;
+import com.ia54.pso.test.util.FunctionWeierstrass;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -8,12 +15,6 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import main.java.com.ia54.pso.test.util.FunctionAckley;
-import main.java.com.ia54.pso.test.util.FunctionAlpine;
-import main.java.com.ia54.pso.test.util.FunctionNocon_rastrigin;
-import main.java.com.ia54.pso.test.util.FunctionNoise;
-import main.java.com.ia54.pso.test.util.FunctionRastrigin;
-import main.java.com.ia54.pso.test.util.FunctionWeierstrass;
 
 
 

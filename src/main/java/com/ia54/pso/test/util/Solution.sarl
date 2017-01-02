@@ -1,4 +1,4 @@
-package main.java.com.ia54.pso.test.util
+package com.ia54.pso.test.util
 
 class Solution {
 	
@@ -34,6 +34,14 @@ class Solution {
 	
 	def getY() : Float {
 		return position.y
+	}
+	
+	def operator_lessThan(b : Solution){
+		return this.value < b.value
+	}
+
+	def operator_greaterThan(b : Solution) {
+		return this.value > b.value
 	}
 	
 	def toString : String{

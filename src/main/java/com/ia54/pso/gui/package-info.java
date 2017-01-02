@@ -5,4 +5,4 @@
  * @author renaud
  *
  */
-package main.java.com.ia54.pso.gui;
+package com.ia54.pso.gui;

@@ -1,0 +1,62 @@
+package com.ia54.pso.mas
+
+import com.ia54.pso.test.util.Solution
+import java.util.UUID
+
+event ParticleSpawned {
+	var ID : UUID
+	
+	new(ID : UUID){
+		this.ID = ID
+	}
+}
+
+event StartCycle
+
+event GetValue {
+	var x : float
+	var y : float
+
+	new (x : float, y : float) {
+		this.x = x
+		this.y = y
+	}
+}
+
+event ReturnedValue {
+	var solution : Solution
+
+	new(sol : Solution) {
+		this.solution = sol
+	}
+}
+
+event OptimumLocalFound {
+	var solution : Solution
+
+	new(solution : Solution) {
+		this.solution = solution
+	}
+}
+
+event GlobalOptimumFound {
+	var solution : Solution
+
+	new(solution : Solution) {
+		this.solution = solution
+	}
+}
+
+event WaitForMove
+
+event AskForMove {
+	var ID : UUID
+	
+	new (ID : UUID) {
+		this.ID = ID
+	}
+}
+
+event AutoriseToMove
+
+event HasMoved

@@ -1,7 +1,11 @@
-package main.java.com.ia54.pso.mas;
+package com.ia54.pso.mas;
 
 
 import java.util.ArrayList;
+
+import com.ia54.pso.test.MapFunc;
+import com.ia54.pso.test.util.FunctionAlpine;
+import com.ia54.pso.test.util.FunctionPSO;
 
 import io.janusproject.Boot;
 import io.sarl.util.OpenEventSpace;
@@ -15,20 +19,20 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import main.java.com.ia54.pso.test.MapFunc;
-import main.java.com.ia54.pso.test.util.FunctionAlpine;
-import main.java.com.ia54.pso.test.util.FunctionPSO;
 
 
 public class MainFrame extends Application {
 	
-	public ArrayList<Rectangle> particleBodys = new ArrayList<>();
 	public static Integer NB_SWARM = 1;
-	public static Integer NB_PARTICLES_PER_LINES = 10;
+	public static Integer NB_PARTICLES_PER_LINES = 2;
+	public static int NB_LINES = 2;
+	
 	public static float HEIGHT = 400;
 	public static float WIDTH = 600;
-	public static int NB_LINES = 10;
+	
 	public static FunctionPSO FUNCTION = new FunctionAlpine();
+	
+	public ArrayList<Rectangle> particleBodys = new ArrayList<>();
 	
 	public OpenEventSpace space;
 	

@@ -1,4 +1,4 @@
-package main.java.com.ia54.pso.test.util;
+package com.ia54.pso.test.util;
 
 public class FunctionWeierstrass implements FunctionPSO {
 

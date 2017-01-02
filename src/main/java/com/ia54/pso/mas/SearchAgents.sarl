@@ -1,10 +1,14 @@
-package main.java.com.ia54.pso.mas
+package com.ia54.pso.mas
 
+import com.ia54.pso.test.util.FunctionPSO
+import com.ia54.pso.test.util.Solution
+import com.ia54.pso.test.util.Vector2f
 import io.sarl.core.DefaultContextInteractions
 import io.sarl.core.Initialize
 import io.sarl.core.InnerContextAccess
 import io.sarl.core.Lifecycle
 import io.sarl.core.Logging
+import io.sarl.core.Schedules
 import io.sarl.lang.core.Address
 import java.util.ArrayList
 import java.util.Random
@@ -12,225 +16,221 @@ import java.util.UUID
 import javafx.beans.property.FloatProperty
 import javafx.beans.property.SimpleFloatProperty
 import javafx.scene.shape.Rectangle
-import main.java.com.ia54.pso.test.util.FunctionPSO
-import main.java.com.ia54.pso.test.util.Solution
-import main.java.com.ia54.pso.test.util.Vector2f
-import io.sarl.core.Schedules
 
 /**
  * @author Vianney M
  * Agent's behavior and associated functions
  */
- 
-event Move
-
-event ParticleSpawned
-
-event endCycle
-
-event StartLive {
-//	var address : Address
+// 
+//event Move
+//
+//event ParticleSpawned
+//
+//event endCycle
+//
+//event StartLive {
+////	var address : Address
+////	
+////	new(address : Address) {
+////		this.address = address;
+////	}
+//}
+//
+//event OptimumLocalFound{
+//	var sol : Solution
 //	
-//	new(address : Address) {
-//		this.address = address;
+//	new(solution : Solution )
+//	{
+//		this.sol = solution
 //	}
-}
-
-event OptimumLocalFound{
-	var sol : Solution
-	
-	new(solution : Solution )
-	{
-		this.sol = solution
-	}
-}
-
-event GlobalOptimumFound {
-	var sol : Solution
-	
-	new(solution : Solution){
-		this.sol = solution
-	}
-}
-
-event GetValue {
-	var x : float
-	var y : float
-	
-	new (x : float, y : float){
-		this.x = x
-		this.y = y
-	}
-}
-
-event ReturnedValue{
-	var solution : Solution
-	var destination : Address
-	
-	new(sol : Solution, address : Address) {
-		this.solution = sol
-		this.destination = address
-		}
-}
-
-agent BootAgent {
-	uses DefaultContextInteractions, Logging
-	
-	var mainFrame : MainFrame
-	
-	var nbSwarm : Integer
-	
-	var adressesSwarm : ArrayList<UUID> = new ArrayList();
-	
-	on Initialize {
-		info("Boot awake !")
-		
-		mainFrame = occurrence.parameters.get(0) as MainFrame;
-		nbSwarm = MainFrame.NB_SWARM;
-		
-		for (var i = 0; i < nbSwarm; i++) {
-			adressesSwarm.add(
-				spawn(Swarm, mainFrame.particleBodys, MainFrame.WIDTH, MainFrame.HEIGHT, MainFrame.NB_LINES, MainFrame.NB_PARTICLES_PER_LINES))
-		}
-		
-	}
-	
-	on GetValue{
-		var value = (MainFrame.FUNCTION as FunctionPSO).applyAsDouble(occurrence.x, occurrence.y);
-		emit(new ReturnedValue(new Solution(occurrence.x, occurrence.y, value), occurrence.source))
-	}
-	
-}
-
-agent Swarm{
-	uses DefaultContextInteractions, Logging
-
-	var solutionHolon : Solution
-	
-	var particleSpawned = 0;
-	var maxParticle = 0;
-	
-	on Initialize{
-		info(this.ID + ": Swarm Awake")
-		
-		var nblines = occurrence.parameters.get(3) as Integer
-		var nbcolumns = occurrence.parameters.get(4) as Integer
-		var bodys = occurrence.parameters.get(0) as ArrayList<Rectangle>
-		var xStep = (occurrence.parameters.get(1) as Float) / nbcolumns
-		var yStep = (occurrence.parameters.get(2) as Float) / nblines
-		
-		this.maxParticle = nblines * nbcolumns
-		
-		for (var i = 0 ; i < nblines ; i++){
-			for (var j = 0 ; j < nbcolumns ; j++){
-				spawn(ResearchAgent, bodys.get((i * nbcolumns) + j), xStep * j, yStep * i, this.ID)
-			}
-		}
-		
-		//spawn(ResearchAgent,x,y,ID)
-		//va spawner les agents à des endroits définis ou non sur la map
-		
-	}
-	
-	on OptimumLocalFound{
-		//on reception of a new optimum, the Holon checks if it is a global optimum:
-		if (solutionHolon == null) {
-			solutionHolon = occurrence.sol
-		} else if (occurrence.sol.value > solutionHolon.value) {
-			info(
-				"Optimum Local Found at x:" + occurrence.sol.getX + ", y:" + occurrence.sol.getY + " and the value is:" +
-					occurrence.sol.value)
-			solutionHolon = occurrence.sol;
-			emit(new GlobalOptimumFound(solutionHolon))
-		}
-		
-	}
-	
-	on ParticleSpawned {
-		particleSpawned++
-		
-		if (particleSpawned == maxParticle) {
-			emit(new StartLive())
-			particleSpawned = 0			
-		}
-	}
-}
-
-agent ResearchAgent{
-	uses DefaultContextInteractions, Logging, InnerContextAccess, Lifecycle, Schedules
-
-	var adressSwarm : UUID
-	var x: FloatProperty
-	var y: FloatProperty
-	
-	var ownBestSolution : Solution
-	var swarmBestSolution : Solution
-
-	var currentVelocity : Vector2f
-	val inertie : Float = 0.5f
-	
-	val phi1 = 0.5f
-	val phi2 = 0.5f
-	
-	val random : Random = new Random()
-	
-	on Initialize{
-		if(occurrence.parameters.isEmpty){
-			info("Empty parameters")
-		} else{
-			info("Spawn")
-			x = new SimpleFloatProperty(occurrence.parameters.get(1) as Float)
-			y = new SimpleFloatProperty(occurrence.parameters.get(2) as Float)
-			
-			var body = occurrence.parameters.get(0) as Rectangle
-			body.xProperty.bind(x)
-			body.yProperty.bind(y)
-			
-			adressSwarm = occurrence.parameters.get(3) as UUID
-
-			currentVelocity = new Vector2f(random.nextFloat * 10, random.nextFloat * 10)
-		}
-		emit(new ParticleSpawned)
-	}
-	
-	on StartLive	{
-		emit(new GetValue(this.x.value, this.y.value))
-		
-		
-	}
-	
-	on ReturnedValue{
-		if (isMe(occurrence.destination)) {
-			var sol = occurrence.solution as Solution
-			if (ownBestSolution == null) {
-				this.ownBestSolution = sol
-			} else if (sol.value < ownBestSolution.value) {
-				this.ownBestSolution = sol
-				emit(new OptimumLocalFound(ownBestSolution))				
-			}
-			in(1000)[
-				Move()
-				emit(new ParticleSpawned)
-			]
-		}	
-	}
-	
-	on GlobalOptimumFound {
-		this.swarmBestSolution = occurrence.sol
-	}
-	
-	def Move() {
-		var newVelocity : Vector2f
-		
-		var b1 = random.nextFloat()*phi1;
-		var b2 = random.nextFloat()*phi2;
-		var currentPosition = new Vector2f(this.x.value, this.y.value)
-		
-		newVelocity = (currentVelocity * inertie) + (ownBestSolution.position - currentPosition) * b1
-		if (swarmBestSolution != null)
-			newVelocity += (swarmBestSolution.position - currentPosition) * b2
-			
-		x.set(x.value + newVelocity.x)	
-		y.set(y.value + newVelocity.y)		
-	}
-}
+//}
+//
+//event GlobalOptimumFound {
+//	var sol : Solution
+//	
+//	new(solution : Solution){
+//		this.sol = solution
+//	}
+//}
+//
+//event GetValue {
+//	var x : float
+//	var y : float
+//	
+//	new (x : float, y : float){
+//		this.x = x
+//		this.y = y
+//	}
+//}
+//
+//event ReturnedValue{
+//	var solution : Solution
+//	var destination : Address
+//	
+//	new(sol : Solution, address : Address) {
+//		this.solution = sol
+//		this.destination = address
+//		}
+//}
+//
+//agent BootAgent {
+//	uses DefaultContextInteractions, Logging
+//	
+//	var mainFrame : MainFrame
+//	
+//	var nbSwarm : Integer
+//	
+//	var adressesSwarm : ArrayList<UUID> = new ArrayList();
+//	
+//	on Initialize {
+//		info("Boot awake !")
+//		
+//		mainFrame = occurrence.parameters.get(0) as MainFrame;
+//		nbSwarm = MainFrame.NB_SWARM;
+//		
+//		for (var i = 0; i < nbSwarm; i++) {
+//			adressesSwarm.add(
+//				spawn(Swarm, mainFrame.particleBodys, MainFrame.WIDTH, MainFrame.HEIGHT, MainFrame.NB_LINES, MainFrame.NB_PARTICLES_PER_LINES))
+//		}
+//		
+//	}
+//	
+//	on GetValue{
+//		var value = (MainFrame.FUNCTION as FunctionPSO).applyAsDouble(occurrence.x, occurrence.y);
+//		emit(new ReturnedValue(new Solution(occurrence.x, occurrence.y, value), occurrence.source))
+//	}
+//	
+//}
+//
+//agent Swarm{
+//	uses DefaultContextInteractions, Logging
+//
+//	var solutionHolon : Solution
+//	
+//	var particleSpawned = 0;
+//	var maxParticle = 0;
+//	
+//	on Initialize{
+//		info(this.ID + ": Swarm Awake")
+//		
+//		var nblines = occurrence.parameters.get(3) as Integer
+//		var nbcolumns = occurrence.parameters.get(4) as Integer
+//		var bodys = occurrence.parameters.get(0) as ArrayList<Rectangle>
+//		var xStep = (occurrence.parameters.get(1) as Float) / nbcolumns
+//		var yStep = (occurrence.parameters.get(2) as Float) / nblines
+//		
+//		this.maxParticle = nblines * nbcolumns
+//		
+//		for (var i = 0 ; i < nblines ; i++){
+//			for (var j = 0 ; j < nbcolumns ; j++){
+//				spawn(ResearchAgent, bodys.get((i * nbcolumns) + j), xStep * j, yStep * i, this.ID)
+//			}
+//		}
+//		
+//		//spawn(ResearchAgent,x,y,ID)
+//		//va spawner les agents à des endroits définis ou non sur la map
+//		
+//	}
+//	
+//	on OptimumLocalFound{
+//		//on reception of a new optimum, the Holon checks if it is a global optimum:
+//		if (solutionHolon == null) {
+//			solutionHolon = occurrence.sol
+//		} else if (occurrence.sol.value > solutionHolon.value) {
+//			info(
+//				"Optimum Local Found at x:" + occurrence.sol.getX + ", y:" + occurrence.sol.getY + " and the value is:" +
+//					occurrence.sol.value)
+//			solutionHolon = occurrence.sol;
+//			emit(new GlobalOptimumFound(solutionHolon))
+//		}
+//		
+//	}
+//	
+//	on ParticleSpawned {
+//		particleSpawned++
+//		
+//		if (particleSpawned == maxParticle) {
+//			emit(new StartLive())
+//			particleSpawned = 0			
+//		}
+//	}
+//}
+//
+//agent ResearchAgent{
+//	uses DefaultContextInteractions, Logging, InnerContextAccess, Lifecycle, Schedules
+//
+//	var adressSwarm : UUID
+//	var x: FloatProperty
+//	var y: FloatProperty
+//	
+//	var ownBestSolution : Solution
+//	var swarmBestSolution : Solution
+//
+//	var currentVelocity : Vector2f
+//	val inertie : Float = 0.5f
+//	
+//	val phi1 = 0.5f
+//	val phi2 = 0.5f
+//	
+//	val random : Random = new Random()
+//	
+//	on Initialize{
+//		if(occurrence.parameters.isEmpty){
+//			info("Empty parameters")
+//		} else{
+//			info("Spawn")
+//			x = new SimpleFloatProperty(occurrence.parameters.get(1) as Float)
+//			y = new SimpleFloatProperty(occurrence.parameters.get(2) as Float)
+//			
+//			var body = occurrence.parameters.get(0) as Rectangle
+//			body.xProperty.bind(x)
+//			body.yProperty.bind(y)
+//			
+//			adressSwarm = occurrence.parameters.get(3) as UUID
+//
+//			currentVelocity = new Vector2f(random.nextFloat * 10, random.nextFloat * 10)
+//		}
+//		emit(new ParticleSpawned)
+//	}
+//	
+//	on StartLive	{
+//		emit(new GetValue(this.x.value, this.y.value))
+//		
+//		
+//	}
+//	
+//	on ReturnedValue{
+//		if (isMe(occurrence.destination)) {
+//			var sol = occurrence.solution as Solution
+//			if (ownBestSolution == null) {
+//				this.ownBestSolution = sol
+//			} else if (sol.value < ownBestSolution.value) {
+//				this.ownBestSolution = sol
+//				emit(new OptimumLocalFound(ownBestSolution))				
+//			}
+//			in(1000)[
+//				Move()
+//				emit(new ParticleSpawned)
+//			]
+//		}	
+//	}
+//	
+//	on GlobalOptimumFound {
+//		this.swarmBestSolution = occurrence.sol
+//	}
+//	
+//	def Move() {
+//		var newVelocity : Vector2f
+//		
+//		var b1 = random.nextFloat()*phi1;
+//		var b2 = random.nextFloat()*phi2;
+//		var currentPosition = new Vector2f(this.x.value, this.y.value)
+//		
+//		newVelocity = (currentVelocity * inertie) + (ownBestSolution.position - currentPosition) * b1
+//		if (swarmBestSolution != null)
+//			newVelocity += (swarmBestSolution.position - currentPosition) * b2
+//			
+//		x.set(x.value + newVelocity.x)	
+//		y.set(y.value + newVelocity.y)		
+//	}
+//}

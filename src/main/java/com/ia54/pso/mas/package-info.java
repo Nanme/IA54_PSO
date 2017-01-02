@@ -5,4 +5,4 @@
  * @author renaud
  *
  */
-package main.java.com.ia54.pso.mas;
+package com.ia54.pso.mas;

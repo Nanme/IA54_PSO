@@ -5,4 +5,4 @@
  * @author Nitrateag
  *
  */
-package main.java.com.ia54.pso.test.gui;
+package com.ia54.pso.test.gui;

@@ -1,5 +1,8 @@
-package main.java.com.ia54.pso.test.gui;
+package com.ia54.pso.test.gui;
 
+
+import com.ia54.pso.test.MapFunc;
+import com.ia54.pso.test.util.FunctionAlpine;
 
 import io.janusproject.Boot;
 import javafx.application.Application;
@@ -12,8 +15,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
-import main.java.com.ia54.pso.test.MapFunc;
-import main.java.com.ia54.pso.test.util.FunctionAlpine;
 
 
 public class MainFrame extends Application {

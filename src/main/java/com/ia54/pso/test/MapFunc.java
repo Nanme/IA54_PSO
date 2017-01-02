@@ -1,12 +1,13 @@
-﻿package main.java.com.ia54.pso.test;
+﻿package com.ia54.pso.test;
+
+import com.ia54.pso.test.util.FunctionMultiple;
+import com.ia54.pso.test.util.FunctionNoise;
+import com.ia54.pso.test.util.FunctionPSO;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelFormat;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
-import main.java.com.ia54.pso.test.util.FunctionMultiple;
-import main.java.com.ia54.pso.test.util.FunctionNoise;
-import main.java.com.ia54.pso.test.util.FunctionPSO;
 
 
 
