@@ -1,0 +1,188 @@
+package com.ia54.pso.mas
+
+import com.ia54.pso.test.util.Solution
+import com.ia54.pso.test.util.Vector2f
+import io.sarl.core.DefaultContextInteractions
+import io.sarl.core.Initialize
+import io.sarl.core.InnerContextAccess
+import io.sarl.core.Lifecycle
+import io.sarl.core.Logging
+import io.sarl.core.Schedules
+import java.util.Random
+import java.util.UUID
+import javafx.application.Platform
+import javafx.beans.property.FloatProperty
+import javafx.beans.property.SimpleFloatProperty
+import javafx.scene.shape.Rectangle
+
+agent Particle {
+	uses DefaultContextInteractions, Logging, InnerContextAccess, Lifecycle, Schedules
+
+	var nbcycle = 10000000;
+
+	var adressSwarm : UUID
+	var x : FloatProperty
+	var y : FloatProperty
+
+	var ownBestSolution : Solution
+	var swarmBestSolution : Solution
+
+	var currentVelocity : Vector2f
+	val inertie : Float = 0.5f
+
+	val phi1 = 0.5f
+	val phi2 = 0.5f
+
+	val random : Random = new Random()
+
+	// var waitTask : AgentTask
+	on Initialize {
+
+		if (occurrence.parameters.isEmpty) {
+			info("Empty parameters")
+		} else {
+			info("Spawn")
+			// Bind coordinates to bodys in frame.
+			x = new SimpleFloatProperty(/*occurrence.parameters.get(1) as Float*/ 300)
+			y = new SimpleFloatProperty(/*occurrence.parameters.get(2) as Float*/ 200)
+
+			info("Spawn at from (" + x.value + "," + y.value + ")")
+
+			var body = occurrence.parameters.get(0) as Rectangle
+			body.xProperty.bind(x)
+			body.yProperty.bind(y)
+
+			adressSwarm = occurrence.parameters.get(3) as UUID
+
+			currentVelocity = new Vector2f(random.nextFloat*50, random.nextFloat*50)
+		}
+
+		// emit spawn event until it receive a response.
+		// this.waitTask = task(this.ID + " :  wait_task")
+		info("want to start cycle !")
+		emit(new ParticleSpawned(this.ID))
+		
+
+	}
+
+	on StartCycle {
+		nbcycle--
+		if (this.nbcycle > 0) {
+
+			info("Cycle started")
+			emit(new GetValue(this.x.value, this.y.value))
+		} else {
+			emit(new ParticleDie)
+		}
+	}
+
+	on ReturnedValue {
+		// waitTask.cancel()
+		info("Value returned")
+		// Check if there is a best solution or not
+		if (ownBestSolution == null) {
+			ownBestSolution = occurrence.solution
+
+			// emit that optimum is found
+			info("Find an optimum !")
+			emit(new OptimumLocalFound(ownBestSolution))
+
+		} else if (occurrence.solution < ownBestSolution) {
+			ownBestSolution = occurrence.solution
+
+			// emit that optimum is found
+			info("Find an optimum !")
+			emit(new OptimumLocalFound(ownBestSolution))
+
+		} else {
+
+			info("Wait for move!")
+			emit(new AskForMove(this.ID))
+
+		}
+	}
+
+	on GlobalOptimumFound {
+		// waitTask.cancel()
+		info("New Global Optimum : " + swarmBestSolution)
+
+		if (swarmBestSolution == null) {
+			this.swarmBestSolution = occurrence.solution
+		} else if (occurrence.solution < swarmBestSolution) {
+			this.swarmBestSolution = occurrence.solution
+		}
+
+		info("Wait for move! 1")
+		emit(new AskForMove(this.ID))
+	}
+
+	on WaitForMove {
+		// waitTask.cancel()
+		info("Wait for Move")
+		emit(new AskForMove(this.ID))
+	}
+
+	on AutoriseToMove {
+		info("Start Move")
+		Move()
+		emit(new HasMoved(this.ID))
+	}
+
+	on ParticleDie {
+		killMe
+	}
+
+	def Move() {
+		var newVelocity : Vector2f
+
+		var b1 = random.nextFloat() * phi1;
+		var b2 = random.nextFloat() * phi2;
+		var currentPosition = new Vector2f(this.x.value, this.y.value)
+
+		newVelocity = (currentVelocity * inertie) + (ownBestSolution.position - currentPosition) * b1
+		if (swarmBestSolution != null) {
+			newVelocity += (swarmBestSolution.position - currentPosition) * b2
+		}
+		
+		info("move from ("+x.value+","+y.value+") to ("+(x.value + newVelocity.x).toString+", "+(y.value + newVelocity.y).toString+")")
+
+		/*Platform.runLater(new Runnable(){
+		
+		override run() {
+			throw new UnsupportedOperationException("TODO: auto-generated method stub")
+		}
+		
+		});*/
+
+		x.set(x.value + newVelocity.x);
+		y.set(y.value + newVelocity.y);
+		
+	}
+	//	on StartLive {
+	// emit(new GetValue(this.x.value, this.y.value))
+	//
+	//	}
+	//
+	//	on ReturnedValue {
+	// if (isMe(occurrence.destination)) {
+	// var sol = occurrence.solution as Solution
+	// if (ownBestSolution == null) {
+	// this.ownBestSolution = sol
+	// } else if (sol.value < ownBestSolution.value) {
+	// this.ownBestSolution = sol
+	// emit(new OptimumLocalFound(ownBestSolution))
+	// }
+	// in(1000) [
+	// Move()
+	// emit(new ParticleSpawned)
+	// ]
+	// }
+	//	}
+	//
+	//	on GlobalOptimumFound {
+	// this.swarmBestSolution = occurrence.sol
+	//	}
+	//
+}
+
+event ParticleDie

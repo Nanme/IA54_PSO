@@ -1,0 +1,96 @@
+package com.ia54.pso.mas
+
+import com.ia54.pso.test.util.Solution
+import io.sarl.core.DefaultContextInteractions
+import io.sarl.core.Initialize
+import io.sarl.core.Logging
+import io.sarl.util.Scopes
+import java.util.ArrayList
+import java.util.UUID
+import javafx.scene.shape.Rectangle
+
+agent Swarm {
+	uses DefaultContextInteractions, Logging
+
+	var bestSolution : Solution
+
+	var particleSpawned = 0
+	var maxParticle = 0
+
+	var particles = new ArrayList<UUID>()
+	var waitingForMove = new ArrayList<UUID>()
+
+	on Initialize {
+		info(this.ID + ": Swarm Awake")
+
+		var nblines = occurrence.parameters.get(3) as Integer
+		var nbcolumns = occurrence.parameters.get(4) as Integer
+		var bodys = occurrence.parameters.get(0) as ArrayList<Rectangle>
+		var xStep = (occurrence.parameters.get(1) as Float) / nbcolumns
+		var yStep = (occurrence.parameters.get(2) as Float) / nblines
+
+		this.maxParticle = nblines * nbcolumns
+
+		for (var i = 0; i < nblines; i++) {
+			for (var j = 0; j < nbcolumns; j++) {
+				particles.add(spawn(Particle, bodys.get((i * nbcolumns) + j), xStep * j, yStep * i, this.ID))
+			}
+		}
+	}
+
+	on ParticleSpawned {
+		emit(new StartCycle, Scopes.addresses(occurrence.source))
+	}
+
+	on OptimumLocalFound {
+		if (bestSolution == null) {
+			bestSolution = occurrence.solution
+
+			emit(new GlobalOptimumFound(bestSolution))
+		} else if (occurrence.solution < bestSolution) {
+			bestSolution = occurrence.solution
+
+			emit(new GlobalOptimumFound(bestSolution))
+		} else {
+			emit(new WaitForMove, Scopes.addresses(occurrence.source))
+		}
+	}
+
+	on AskForMove {
+		if (!waitingForMove.contains(occurrence.ID)) {
+			waitingForMove.add(occurrence.ID)
+		}
+
+		if (waitingForMove.size == maxParticle) {
+			emit(new AutoriseToMove)
+		}
+	}
+
+	on HasMoved {
+		emit(new StartCycle, Scopes.addresses(occurrence.source))
+	}
+
+	//	on OptimumLocalFound {
+			// // on reception of a new optimum, the Holon checks if it is a global optimum:
+	// if (solutionHolon == null) {
+	// solutionHolon = occurrence.sol
+	// } else if (occurrence.sol.value > solutionHolon.value) {
+	// info(
+	// "Optimum Local Found at x:" + occurrence.sol.getX + ", y:" + occurrence.sol.getY +
+	// " and the value is:" +
+	// occurrence.sol.value)
+	// solutionHolon = occurrence.sol;
+	// emit(new GlobalOptimumFound(solutionHolon))
+	// }
+	//
+	//	}
+	//
+	//	on ParticleSpawned {
+	// particleSpawned++
+	//
+	// if (particleSpawned == maxParticle) {
+	// emit(new StartLive())
+	// particleSpawned = 0
+	// }
+	//	}
+}
