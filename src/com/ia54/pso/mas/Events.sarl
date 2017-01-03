@@ -59,4 +59,10 @@ event AskForMove {
 
 event AutoriseToMove
 
-event HasMoved
+event HasMoved {
+	var ID : UUID
+	
+	new(ID : UUID) {
+		this.ID = ID
+	}
+}
