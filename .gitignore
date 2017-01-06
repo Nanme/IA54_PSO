@@ -52,7 +52,7 @@ eclipse-sarl/tests/io.sarl.lang.tests/src/test/generated-sources/
 src/main/generated-sources/
 /src/main/generated-sources/*
 src/main/generated-sources/*
-
+/src/generated-sources/*
 # Xtext templates
 *.xml_gen
 *.java_gen

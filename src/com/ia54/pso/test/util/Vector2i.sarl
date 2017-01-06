@@ -1,0 +1,66 @@
+package com.ia54.pso.test.util
+
+class Vector2i {
+	var x : Integer;
+	var y : Integer;
+
+	new {
+		this.x = 0;
+		this.y = 0;
+	}
+
+	new (x : Integer, y : Integer) {
+		this.x = x;
+		this.y = y;
+	}
+
+	def getX() : Integer {
+		return this.x
+	}
+
+	def getY() : Integer {
+		return this.y
+	}
+
+	def normalize() {
+		var norm = Math.sqrt(x ** 2 + y ** 2) as float;
+		this.x = Math.round(x / norm);
+		this.y = Math.round(x / norm);
+	}
+
+	def getNorm() : double {
+		return Math.sqrt(x ** 2 + y ** 2);
+	}
+
+	def getSquareNorm() : double {
+		return x ** 2 + y ** 2
+	}
+
+	def operator_plus(b : Vector2i) : Vector2i {
+		return new Vector2i(this.x + b.x, this.y + b.y)
+	}
+
+	def operator_minus(a : Vector2i, b : Vector2i) : Vector2i {
+		return new Vector2i(a.x - b.x, a.y - b.y)
+	}
+
+	def operator_minus(a : Vector2i) : Vector2i {
+		return new Vector2i(-a.x, -a.y)
+	}
+
+	def operator_multiply(cte : Integer) : Vector2i {
+		return new Vector2i(cte * this.x, cte * this.y)
+	}
+
+	def operator_equals(a : Vector2i, b : Vector2i) : boolean {
+		return (a.x == b.x) && (a.y == b.y)
+	}
+
+	def operator_notEquals(a : Vector2i, b : Vector2i) : boolean {
+		return !(a == b)
+	}
+
+	def toString() : String {
+		return "(" + this.x + ", " + this.y + ")"
+	}
+}

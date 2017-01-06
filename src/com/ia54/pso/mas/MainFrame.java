@@ -4,8 +4,6 @@ package com.ia54.pso.mas;
 import java.util.ArrayList;
 
 import com.ia54.pso.test.MapFunc;
-import com.ia54.pso.test.util.FunctionAlpine;
-import com.ia54.pso.test.util.FunctionPSO;
 import com.ia54.pso.test.util.FunctionRastrigin;
 
 import io.janusproject.Boot;
@@ -24,12 +22,12 @@ import javafx.stage.Stage;
 
 public class MainFrame extends Application {
 	public static Integer NB_SWARM = 1;
-	public static Integer NB_PARTICLES_PER_LINES = 1;
-	public static int NB_LINES = 1;
+	public static Integer NB_PARTICLES_PER_LINES = 2;
+	public static int NB_LINES = 2;
 	
-	public static float HEIGHT = 400;
-	public static float WIDTH = 600;
-	public static MapFunc MAP = new MapFunc((int) WIDTH, (int) HEIGHT, new FunctionRastrigin()	, -60,0,-40,0);
+	public static float HEIGHT = 1080;
+	public static float WIDTH = 1920;
+	public MapFunc MAP = new MapFunc((int) WIDTH, (int) HEIGHT, new FunctionRastrigin()	, -10,10,-10,10);
 	
 	public ArrayList<Rectangle> particleBodys = new ArrayList<>();
 	
@@ -98,7 +96,7 @@ public class MainFrame extends Application {
 		
 		primaryStage.setScene(scene);
 		primaryStage.setHeight(HEIGHT);
-		primaryStage.setWidth(600);
+		primaryStage.setWidth(WIDTH);
 		primaryStage.show();		
 	}
 

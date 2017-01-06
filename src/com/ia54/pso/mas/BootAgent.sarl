@@ -3,13 +3,14 @@ package com.ia54.pso.mas
 import com.ia54.pso.test.util.Solution
 import io.sarl.core.DefaultContextInteractions
 import io.sarl.core.Initialize
+import io.sarl.core.Lifecycle
 import io.sarl.core.Logging
 import io.sarl.util.Scopes
 import java.util.ArrayList
 import java.util.UUID
 
 agent BootAgent {
-	uses DefaultContextInteractions, Logging
+	uses DefaultContextInteractions, Logging, Lifecycle
 
 	var mainFrame : MainFrame
 
@@ -32,11 +33,16 @@ agent BootAgent {
 	}
 
 	on GetValue {
-		var value = MainFrame.MAP.getValue(occurrence.x, occurrence.y)
+		var value = mainFrame.MAP.getValue(occurrence.x, occurrence.y)
 		emit(
 			new ReturnedValue(new Solution(occurrence.x, occurrence.y, value)),
 			Scopes.addresses(occurrence.source)
 		)
+	}
+	
+	on SwarmDie {
+		info("PSO : Ended")
+		killMe
 	}
 
 	//	on GetValue {

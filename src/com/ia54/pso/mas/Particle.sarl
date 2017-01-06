@@ -2,6 +2,7 @@ package com.ia54.pso.mas
 
 import com.ia54.pso.test.util.Solution
 import com.ia54.pso.test.util.Vector2f
+import com.ia54.pso.test.util.Vector2i
 import io.sarl.core.DefaultContextInteractions
 import io.sarl.core.Initialize
 import io.sarl.core.InnerContextAccess
@@ -10,7 +11,6 @@ import io.sarl.core.Logging
 import io.sarl.core.Schedules
 import java.util.Random
 import java.util.UUID
-import javafx.application.Platform
 import javafx.beans.property.FloatProperty
 import javafx.beans.property.SimpleFloatProperty
 import javafx.scene.shape.Rectangle
@@ -18,33 +18,40 @@ import javafx.scene.shape.Rectangle
 agent Particle {
 	uses DefaultContextInteractions, Logging, InnerContextAccess, Lifecycle, Schedules
 
-	var nbcycle = 10000000;
+	var nbcycle = 10000;
 
 	var adressSwarm : UUID
 	var x : FloatProperty
 	var y : FloatProperty
+	
+	var truePosition : Vector2i
 
 	var ownBestSolution : Solution
 	var swarmBestSolution : Solution
 
 	var currentVelocity : Vector2f
-	val inertie : Float = 0.5f
+	val inertie : Float = 0.1f
 
-	val phi1 = 0.5f
-	val phi2 = 0.5f
+	val phi1 = 2
+	val phi2 = 2
 
 	val random : Random = new Random()
-
-	// var waitTask : AgentTask
+	
+	var width : Float
+	var height : Float
+	
+	var waitForMove = false
 	on Initialize {
-
 		if (occurrence.parameters.isEmpty) {
 			info("Empty parameters")
 		} else {
+			width = occurrence.parameters.get(4) as Float
+			height = occurrence.parameters.get(5) as Float
+			
 			info("Spawn")
-			// Bind coordinates to bodys in frame.
-			x = new SimpleFloatProperty(/*occurrence.parameters.get(1) as Float*/ 300)
-			y = new SimpleFloatProperty(/*occurrence.parameters.get(2) as Float*/ 200)
+			// Bind coordinates to bodys in frame.			
+			x = new SimpleFloatProperty(occurrence.parameters.get(1) as Float /*width/2*/)
+			y = new SimpleFloatProperty(occurrence.parameters.get(2) as Float /*height/2*/)
 
 			info("Spawn at from (" + x.value + "," + y.value + ")")
 
@@ -54,7 +61,7 @@ agent Particle {
 
 			adressSwarm = occurrence.parameters.get(3) as UUID
 
-			currentVelocity = new Vector2f(random.nextFloat*50, random.nextFloat*50)
+			currentVelocity = new Vector2f(1f,1f)
 		}
 
 		// emit spawn event until it receive a response.
@@ -76,60 +83,61 @@ agent Particle {
 		}
 	}
 
-	on ReturnedValue {
+	on ReturnedValue  {
 		// waitTask.cancel()
-		info("Value returned")
+//		info("Value returned : " + occurrence.solution)
 		// Check if there is a best solution or not
 		if (ownBestSolution == null) {
 			ownBestSolution = occurrence.solution
 
 			// emit that optimum is found
-			info("Find an optimum !")
+//			info("Find an optimum !")
 			emit(new OptimumLocalFound(ownBestSolution))
 
 		} else if (occurrence.solution < ownBestSolution) {
 			ownBestSolution = occurrence.solution
 
 			// emit that optimum is found
-			info("Find an optimum !")
+//			info("Find an optimum !")
 			emit(new OptimumLocalFound(ownBestSolution))
 
 		} else {
 
-			info("Wait for move!")
+//			info("Wait for move!")
 			emit(new AskForMove(this.ID))
-
+			waitForMove = true
 		}
 	}
 
-	on GlobalOptimumFound {
+	on GlobalOptimumFound  {
 		// waitTask.cancel()
-		info("New Global Optimum : " + swarmBestSolution)
 
 		if (swarmBestSolution == null) {
 			this.swarmBestSolution = occurrence.solution
 		} else if (occurrence.solution < swarmBestSolution) {
 			this.swarmBestSolution = occurrence.solution
 		}
-
-		info("Wait for move! 1")
-		emit(new AskForMove(this.ID))
+		info("New Global Optimum : " + swarmBestSolution)
 	}
 
-	on WaitForMove {
+	on WaitForMove [!waitForMove] {
 		// waitTask.cancel()
-		info("Wait for Move")
+//		info("Wait for Move")
 		emit(new AskForMove(this.ID))
 	}
 
 	on AutoriseToMove {
-		info("Start Move")
-		Move()
+//		info("Start Move")
+//		in(1000) [
+			Move()
+//		]
 		emit(new HasMoved(this.ID))
+		waitForMove = false
 	}
 
 	on ParticleDie {
-		killMe
+		if(occurrence.fromMe)
+			killMe
 	}
 
 	def Move() {
@@ -144,7 +152,7 @@ agent Particle {
 			newVelocity += (swarmBestSolution.position - currentPosition) * b2
 		}
 		
-		info("move from ("+x.value+","+y.value+") to ("+(x.value + newVelocity.x).toString+", "+(y.value + newVelocity.y).toString+")")
+//		info("move from ("+x.value+","+y.value+") to ("+(x.value + newVelocity.x).toString+", "+(y.value + newVelocity.y).toString+")")
 
 		/*Platform.runLater(new Runnable(){
 		
@@ -153,9 +161,35 @@ agent Particle {
 		}
 		
 		});*/
+		
+		//We check if the new value of w & y fit to the window
+		var tmpX = x.value + newVelocity.x
+		var tmpY = y.value + newVelocity.y
+		
+		if(tmpX < 0) {
+			while (tmpX < 0) {
+				tmpX += width				
+			}
+		} else if (tmpX > width) {
+			while (tmpX > width) {
+				tmpX = width - tmpX
+			}
+		}
 
-		x.set(x.value + newVelocity.x);
-		y.set(y.value + newVelocity.y);
+		if (tmpY < 0) {
+			while (tmpY < 0) {
+				tmpY += height
+			}
+		} else if (tmpY > height) {
+			while (tmpY > width) {
+				tmpY = height - tmpY
+			}
+		}
+
+		x.set(tmpX);
+		y.set(tmpY);
+		
+		this.currentVelocity = newVelocity
 		
 	}
 	//	on StartLive {

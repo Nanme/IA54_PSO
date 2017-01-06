@@ -8,9 +8,10 @@ import io.sarl.util.Scopes
 import java.util.ArrayList
 import java.util.UUID
 import javafx.scene.shape.Rectangle
+import io.sarl.core.Lifecycle
 
 agent Swarm {
-	uses DefaultContextInteractions, Logging
+	uses DefaultContextInteractions, Logging, Lifecycle
 
 	var bestSolution : Solution
 
@@ -26,14 +27,14 @@ agent Swarm {
 		var nblines = occurrence.parameters.get(3) as Integer
 		var nbcolumns = occurrence.parameters.get(4) as Integer
 		var bodys = occurrence.parameters.get(0) as ArrayList<Rectangle>
-		var xStep = (occurrence.parameters.get(1) as Float) / nbcolumns
-		var yStep = (occurrence.parameters.get(2) as Float) / nblines
+		var xStep = (occurrence.parameters.get(1) as Float) / nbcolumns-100
+		var yStep = (occurrence.parameters.get(2) as Float) / nblines-100
 
 		this.maxParticle = nblines * nbcolumns
 
 		for (var i = 0; i < nblines; i++) {
 			for (var j = 0; j < nbcolumns; j++) {
-				particles.add(spawn(Particle, bodys.get((i * nbcolumns) + j), xStep * j, yStep * i, this.ID))
+				particles.add(spawn(Particle, bodys.get((i * nbcolumns) + j), xStep * j + 200, yStep * i + 200, this.ID, occurrence.parameters.get(1), occurrence.parameters.get(2)))
 			}
 		}
 	}
@@ -51,23 +52,41 @@ agent Swarm {
 			bestSolution = occurrence.solution
 
 			emit(new GlobalOptimumFound(bestSolution))
-		} else {
-			emit(new WaitForMove, Scopes.addresses(occurrence.source))
 		}
+
+		emit(new WaitForMove, Scopes.addresses(occurrence.source))
 	}
 
 	on AskForMove {
-		if (!waitingForMove.contains(occurrence.ID)) {
-			waitingForMove.add(occurrence.ID)
-		}
+		synchronized (this) {
+			if (!waitingForMove.contains(occurrence.ID)) {
+				waitingForMove.add(occurrence.ID)
 
-		if (waitingForMove.size == maxParticle) {
-			emit(new AutoriseToMove)
+			}
+
+			if (waitingForMove.size == maxParticle) {
+				emit(new AutoriseToMove)
+			}
 		}
 	}
 
 	on HasMoved {
-		emit(new StartCycle, Scopes.addresses(occurrence.source))
+		synchronized (this) {
+			particleSpawned++
+			if(particleSpawned == maxParticle) {
+				emit(new StartCycle)
+				particleSpawned = 0
+			}
+		}
+	}
+	
+	on ParticleDie {
+		maxParticle--
+		if (maxParticle <= 0) {
+			info("Best Solution is : " + bestSolution)
+			emit(new SwarmDie)
+			killMe
+		}
 	}
 
 	//	on OptimumLocalFound {
@@ -94,3 +113,4 @@ agent Swarm {
 	// }
 	//	}
 }
+event SwarmDie
