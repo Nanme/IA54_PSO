@@ -1,6 +1,6 @@
 package com.ia54.pso.mas
 
-import com.ia54.pso.test.TestRunnable
+import com.ia54.pso.test.MoveRunnable
 import com.ia54.pso.test.util.Solution
 import com.ia54.pso.test.util.Vector2f
 import com.ia54.pso.test.util.Vector2i
@@ -189,7 +189,7 @@ agent Particle {
 		}
 		
 		
-		Platform.runLater(new TestRunnable(x, y, tmpX, tmpY))
+		Platform.runLater(new MoveRunnable(x, y, tmpX, tmpY))
 		
 		this.currentVelocity = newVelocity
 		
