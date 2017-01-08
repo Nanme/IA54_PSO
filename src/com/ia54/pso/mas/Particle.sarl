@@ -1,5 +1,6 @@
 package com.ia54.pso.mas
 
+import com.ia54.pso.test.TestRunnable
 import com.ia54.pso.test.util.Solution
 import com.ia54.pso.test.util.Vector2f
 import com.ia54.pso.test.util.Vector2i
@@ -11,6 +12,7 @@ import io.sarl.core.Logging
 import io.sarl.core.Schedules
 import java.util.Random
 import java.util.UUID
+import javafx.application.Platform
 import javafx.beans.property.FloatProperty
 import javafx.beans.property.SimpleFloatProperty
 import javafx.scene.shape.Rectangle
@@ -185,9 +187,9 @@ agent Particle {
 				tmpY = height - tmpY
 			}
 		}
-
-		x.set(tmpX);
-		y.set(tmpY);
+		
+		
+		Platform.runLater(new TestRunnable(x, y, tmpX, tmpY))
 		
 		this.currentVelocity = newVelocity
 		

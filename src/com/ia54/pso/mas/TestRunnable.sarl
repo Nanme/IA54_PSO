@@ -1,0 +1,26 @@
+package com.ia54.pso.test
+
+import javafx.beans.property.FloatProperty
+
+class TestRunnable implements Runnable {
+	
+	var newX : Float
+	var newY : Float
+	
+	var x : FloatProperty
+	var y : FloatProperty
+	
+	new(x : FloatProperty, y : FloatProperty, newX : Float, newY : Float) {
+		this.x = x
+		this.y = y
+		this.newX = newX
+		this.newY = newY
+	}
+	
+	override run {
+
+		x.set(newX);
+		y.set(newY);
+	}
+
+}

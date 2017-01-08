@@ -11,6 +11,7 @@ import io.sarl.util.OpenEventSpace;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -18,6 +19,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 
 public class MainFrame extends Application {
@@ -86,6 +88,15 @@ public class MainFrame extends Application {
 //			}
 //		});
 //		rect.setFill(Color.RED);
+
+//		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+//			
+//			@Override
+//			public void handle(WindowEvent event) {
+//				// TODO Auto-generated method stub
+//				
+//			}
+//		});
 		
 		
 		root.getChildren().add(imageView);
