@@ -7,10 +7,14 @@ import com.ia54.pso.test.MapFunc;
 import com.ia54.pso.test.util.FunctionRastrigin;
 
 import io.janusproject.Boot;
+import io.janusproject.Boot.Exiter;
+import io.janusproject.kernel.Kernel;
+//import io.janusproject.kernel.Kernel;
 import io.sarl.util.OpenEventSpace;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -18,6 +22,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+import zmq.Mailbox;
 
 
 public class MainFrame extends Application {
@@ -49,7 +55,7 @@ public class MainFrame extends Application {
 	
 				@Override
 				public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-//					System.out.println("X a changé de " + oldValue + " à " + newValue);
+					System.out.println("X a changé de " + oldValue + " à " + newValue);
 					
 				}
 			});
@@ -57,13 +63,13 @@ public class MainFrame extends Application {
 	
 				@Override
 				public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-//					System.out.println("Y a changé de " + oldValue + " à " + newValue);
+					System.out.println("Y a changé de " + oldValue + " à " + newValue);
 					
 				}
 			});
 			rect.setFill(Color.RED);
 		}
-		
+
 		Boot.startJanus((Class) null, BootAgent.class, this);
     	
 		Group root = new Group();
@@ -93,12 +99,22 @@ public class MainFrame extends Application {
 		for(Rectangle rect : particleBodys) {
 			root.getChildren().add(rect);
 		}
+		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+			
+			@Override
+			public void handle(WindowEvent event) {
+				Exiter e  = Boot.getExiter();
+				e.exit();
+				
+			}
+		});		
 		
 		primaryStage.setScene(scene);
 		primaryStage.setHeight(HEIGHT);
 		primaryStage.setWidth(WIDTH);
-		primaryStage.show();		
+		primaryStage.show();
 	}
+
 
 	public static void main(String[] args) {
 		launch(args);
