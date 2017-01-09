@@ -75,6 +75,8 @@ public class MainFrameController {
 	@FXML CheckBox CNoise;
 	@FXML TextField freq;
 	@FXML Label labFreq;
+	
+	public Label labsol = new Label("kjghydrsefd");
 
 	
 	
@@ -282,17 +284,30 @@ public class MainFrameController {
 		
 		FunctionPSO funcChoice = getFuncChoice();
 		
+		labsol.textProperty().addListener(new ChangeListener<String>() {
+
+
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+//				System.out.println(oldValue);
+//				System.out.println(newValue);
+				
+			}
+		});
+		
 		MAP = new MapFunc((int) WIDTH, (int) HEIGHT, funcChoice, fconv.fromString(Xmin.getText()),fconv.fromString(Xmax.getText()),fconv.fromString(Ymin.getText()),fconv.fromString(Ymax.getText()));
 		if(CNoise.isSelected())
 			MAP.noise();
 		
 		
 		 Stage primaryStage = new Stage();
-		 primaryStage.setTitle("My New Stage Title");
+		 
+		 
 //		MapFunc map = new MapFunc(600, 400, FUNCTION, 0,60,0,40);
 //		map.noise();
 		Image img = MAP.draw();
 		ImageView imageView = new ImageView(img);
+		primaryStage.setTitle(MAP.Min.ToString());
 		
 		for (int i = 0 ; i<NB_PARTICLES_PER_LINES*NB_LINES ; i++){
 			particleBodys.add(new Rectangle(0,0,3,3));
@@ -317,8 +332,9 @@ public class MainFrameController {
 			});
 			rect.setFill(Color.RED);
 		}
+		labsol.setTextFill(Color.RED);
 
-		Boot.startJanus((Class) null, BootAgent.class, new MainFrame(NB_SWARM, NB_PARTICLES_PER_LINES, NB_LINES, HEIGHT, WIDTH, MAP, particleBodys));
+		Boot.startJanus((Class) null, BootAgent.class, new MainFrame(NB_SWARM, NB_PARTICLES_PER_LINES, NB_LINES, HEIGHT, WIDTH, MAP, particleBodys), labsol.textProperty());
 		
 //		rect.xProperty().addListener(new ChangeListener<Number>() {
 //
@@ -340,6 +356,9 @@ public class MainFrameController {
 
 		Group root = new Group();
 		root.getChildren().add(imageView);
+		
+		
+		root.getChildren().add(labsol);
 		
 		for(Rectangle rect : particleBodys) {
 			root.getChildren().add(rect);

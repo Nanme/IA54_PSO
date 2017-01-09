@@ -3,7 +3,7 @@ package com.ia54.pso.test.util
 class Solution {
 	
 	var position : Vector2f
-	var value : double
+	var value : Double
 	
 	new(){
 		this.position = new Vector2f();

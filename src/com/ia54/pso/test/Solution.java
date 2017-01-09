@@ -34,5 +34,11 @@ public class Solution {
 		y=Y;
 		val = Val;
 	}
+	
+	public String ToString()
+	{
+		return "Solution : [ (" + x + " " + y + "), " + val + "]" ;
+	}
+	
 
 }

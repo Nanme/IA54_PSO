@@ -1,0 +1,21 @@
+package com.ia54.pso.mas
+
+import javafx.beans.property.StringProperty
+
+class LabelRunnable implements Runnable {
+
+	var newlab : String
+
+	var lab : StringProperty
+
+
+	new(lab : StringProperty,newlab : String) {
+		this.newlab = newlab
+		this.lab = lab
+	}
+
+	override run {
+		lab.set(newlab);
+	}
+
+}

@@ -27,7 +27,7 @@ agent BootAgent {
 		for (var i = 0; i < nbSwarm; i++) {
 			adressesSwarm.add(
 				spawn(Swarm, mainFrame.particleBodys, MainFrame.WIDTH, MainFrame.HEIGHT, MainFrame.NB_LINES,
-					MainFrame.NB_PARTICLES_PER_LINES))
+					MainFrame.NB_PARTICLES_PER_LINES, occurrence.parameters.get(1)))
 		}
 
 	}
