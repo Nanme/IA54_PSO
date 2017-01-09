@@ -18,6 +18,7 @@ import com.ia54.pso.test.util.FunctionWeierstrass;
 import io.janusproject.Boot;
 import io.janusproject.Boot.Exiter;
 import io.sarl.util.OpenEventSpace;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -32,6 +33,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.TextFormatter.Change;
@@ -73,6 +75,7 @@ public class MainFrameController {
 	@FXML CheckBox CNoise;
 	@FXML TextField freq;
 	@FXML Label labFreq;
+
 	
 	
 	@FXML public void OpenParam(){
@@ -88,7 +91,10 @@ public class MainFrameController {
 	
 	combobox.setItems(options);
 	
+	initXY();
+	
 	}
+	
 	
 	@FXML public void initXY()
 	{
@@ -395,6 +401,46 @@ public class MainFrameController {
 	        return DIGIT_PATTERN.matcher(aT.getText()).matches() ? aT : null;
 	    }
 	}
+	
+	 public static class FuncPar {
+	        private final SimpleStringProperty FuncPso;
+	        public SimpleStringProperty getFuncPso() {
+				return FuncPso;
+			}
+
+			public SimpleStringProperty getXmin() {
+				return Xmin;
+			}
+
+			public SimpleStringProperty getXmax() {
+				return Xmax;
+			}
+
+			public SimpleStringProperty getYmin() {
+				return Ymin;
+			}
+
+			public SimpleStringProperty getYmax() {
+				return Ymax;
+			}
+
+			private final SimpleStringProperty Xmin;
+	        private final SimpleStringProperty Xmax;
+	        private final SimpleStringProperty Ymin;
+	        private final SimpleStringProperty Ymax;
+
+	        private FuncPar(String FuncPso, String Xmin, String Xmax, String Ymin, String Ymax) {
+	            this.FuncPso = new SimpleStringProperty(FuncPso);
+	            this.Xmin = new SimpleStringProperty(Xmin);
+	            this.Xmax = new SimpleStringProperty(Xmax);
+	            this.Ymin = new SimpleStringProperty(Ymin);
+	            this.Ymax = new SimpleStringProperty(Ymax);
+	            
+	        }
+	        
+	        
+	        
+	 }
 }
 
 

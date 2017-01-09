@@ -9,37 +9,37 @@
 <?import javafx.scene.control.TitledPane?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<TitledPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ia54.pso.mas.MainFrameController">
+<TitledPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="333.0" prefWidth="480.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ia54.pso.mas.MainFrameController">
    <content>
       <Accordion>
          <panes>
             <TitledPane animated="false" onMouseClicked="#OpenParam" text="Parametres">
               <content>
-                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="440.0" prefWidth="596.0">
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="275.0" prefWidth="476.0">
                      <children>
-                        <Button layoutX="44.0" layoutY="306.0" mnemonicParsing="false" onAction="#handleSubmitButtonAction" onMouseClicked="#launchPSO" text="Start" />
-                        <TextField fx:id="Hfeild" layoutX="54.0" layoutY="186.0" onKeyTyped="#FormatH" promptText="1080" text="600" />
-                        <TextField fx:id="Wfeild" layoutX="54.0" layoutY="243.0" onKeyTyped="#FormatW" promptText="1920" text="600" />
-                        <Label layoutX="47.0" layoutY="166.0" text="Height" />
-                        <Label layoutX="47.0" layoutY="222.0" prefHeight="14.0" prefWidth="59.0" text="Width" />
-                        <TextField fx:id="nb_swarm" layoutX="51.0" layoutY="31.0" onKeyTyped="#init_nb_swarm" promptText="1" text="1" />
-                        <TextField fx:id="nb_particule_per_lines" layoutX="50.0" layoutY="91.0" onKeyTyped="#init_nb_particule_per_lines" promptText="2" text="2" />
-                        <Label layoutX="35.0" layoutY="14.0" text="Nbr de swarm" />
-                        <Label layoutX="8.0" layoutY="71.0" text="Nbr de particule/lignes" />
-                        <TextField fx:id="nb_lines" layoutX="54.0" layoutY="145.0" onKeyTyped="#init_nb_lines" promptText="2" text="2" />
-                        <Label layoutX="54.0" layoutY="125.0" text="Nbr de lignes" />
-                        <ComboBox fx:id="combobox" layoutX="189.0" layoutY="26.0" onAction="#initXY" prefHeight="22.0" prefWidth="130.0" promptText="Rastrigin" />
-                        <TextField fx:id="Xmin" layoutX="189.0" layoutY="77.0" onKeyTyped="#FormatXmin" prefHeight="22.0" prefWidth="47.0" text="-10" />
-                        <TextField fx:id="Ymin" layoutX="189.0" layoutY="134.0" onKeyTyped="#FormatYmin" prefHeight="22.0" prefWidth="47.0" text="-10" />
-                        <TextField fx:id="Ymax" layoutX="260.0" layoutY="134.0" onKeyTyped="#FormatYmax" prefHeight="22.0" prefWidth="47.0" text="10" />
-                        <TextField fx:id="Xmax" layoutX="260.0" layoutY="77.0" onKeyTyped="#FormatXmax" prefHeight="22.0" prefWidth="47.0" text="10" />
-                        <Label layoutX="193.0" layoutY="57.0" text="Xmin" />
-                        <Label layoutX="264.0" layoutY="57.0" text="Xmax" />
-                        <Label layoutX="264.0" layoutY="113.0" text="Ymax" />
-                        <Label layoutX="193.0" layoutY="113.0" text="Ymin" />
-                        <CheckBox fx:id="CNoise" layoutX="193.0" layoutY="214.0" mnemonicParsing="false" text="Noise" />
-                        <TextField fx:id="freq" layoutX="260.0" layoutY="175.0" onKeyTyped="#FormatFreq" prefHeight="22.0" prefWidth="47.0" text="150" visible="false" />
-                        <Label fx:id="labFreq" layoutX="193.0" layoutY="179.0" text="Frequence" visible="false" />
+                        <Button layoutX="39.0" layoutY="197.0" mnemonicParsing="false" onAction="#handleSubmitButtonAction" onMouseClicked="#launchPSO" prefHeight="54.0" prefWidth="131.0" text="Start" />
+                        <TextField fx:id="Hfeild" layoutX="42.0" layoutY="148.0" onKeyTyped="#FormatH" promptText="1080" text="600" />
+                        <TextField fx:id="Wfeild" layoutX="170.0" layoutY="148.0" onKeyTyped="#FormatW" promptText="1920" text="600" />
+                        <Label layoutX="35.0" layoutY="128.0" text="Height" />
+                        <Label layoutX="163.0" layoutY="127.0" prefHeight="14.0" prefWidth="59.0" text="Width" />
+                        <TextField fx:id="nb_swarm" layoutX="40.0" layoutY="91.0" onKeyTyped="#init_nb_swarm" promptText="1" text="1" />
+                        <TextField fx:id="nb_particule_per_lines" layoutX="169.0" layoutY="91.0" onKeyTyped="#init_nb_particule_per_lines" promptText="2" text="2" />
+                        <Label layoutX="47.0" layoutY="71.0" text="Nbr de swarm" />
+                        <Label layoutX="166.0" layoutY="71.0" text="Nbr de particule/lignes" />
+                        <TextField fx:id="nb_lines" layoutX="356.0" layoutY="91.0" onKeyTyped="#init_nb_lines" promptText="2" text="2" />
+                        <Label layoutX="360.0" layoutY="71.0" text="Nbr de lignes" />
+                        <ComboBox fx:id="combobox" layoutX="32.0" layoutY="26.0" onAction="#initXY" prefHeight="22.0" prefWidth="154.0" promptText="Rastrigin" />
+                        <TextField fx:id="Xmin" layoutX="193.0" layoutY="26.0" onKeyTyped="#FormatXmin" prefHeight="22.0" prefWidth="47.0" text="-10" />
+                        <TextField fx:id="Ymin" layoutX="293.0" layoutY="26.0" onKeyTyped="#FormatYmin" prefHeight="22.0" prefWidth="47.0" text="-10" />
+                        <TextField fx:id="Ymax" layoutX="343.0" layoutY="26.0" onKeyTyped="#FormatYmax" prefHeight="22.0" prefWidth="47.0" text="10" />
+                        <TextField fx:id="Xmax" layoutX="243.0" layoutY="26.0" onKeyTyped="#FormatXmax" prefHeight="22.0" prefWidth="47.0" text="10" />
+                        <Label layoutX="193.0" layoutY="7.0" text="Xmin" />
+                        <Label layoutX="243.0" layoutY="7.0" text="Xmax" />
+                        <Label layoutX="343.0" layoutY="7.0" text="Ymax" />
+                        <Label layoutX="293.0" layoutY="7.0" text="Ymin" />
+                        <CheckBox fx:id="CNoise" layoutX="187.0" layoutY="216.0" mnemonicParsing="false" text="Random Noise" />
+                        <TextField fx:id="freq" layoutX="407.0" layoutY="26.0" onKeyTyped="#FormatFreq" prefHeight="22.0" prefWidth="47.0" text="150" />
+                        <Label fx:id="labFreq" layoutX="401.0" layoutY="7.0" text="Frequence" />
                      </children>
                   </AnchorPane>
               </content>
