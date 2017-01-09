@@ -3,6 +3,8 @@ package com.ia54.pso.mas;
 
 
 import java.util.ArrayList;
+import java.util.function.UnaryOperator;
+import java.util.regex.Pattern;
 
 import com.ia54.pso.test.MapFunc;
 import com.ia54.pso.test.util.FunctionRastrigin;
@@ -18,6 +20,9 @@ import javafx.fxml.FXML;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
+import javafx.scene.control.TextFormatter.Change;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
@@ -25,14 +30,16 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javafx.util.StringConverter;
+import javafx.util.converter.IntegerStringConverter;
 
 public class MainFrameController {
 	public static Integer NB_SWARM = 1;
 	public static Integer NB_PARTICLES_PER_LINES = 2;
 	public static int NB_LINES = 2;
 	
-	public static float HEIGHT = 1080;
-	public static float WIDTH = 1920;
+	public float HEIGHT = 1080;
+	public float WIDTH = 1920;
 	public MapFunc MAP = new MapFunc((int) WIDTH, (int) HEIGHT, new FunctionRastrigin()	, -10,10,-10,10);
 	
 
@@ -40,7 +47,37 @@ public class MainFrameController {
 	
 	public OpenEventSpace space;
 	
+	@FXML TextField Wfeild;
+	@FXML TextField Hfeild;
+	
+	
+	@FXML public void FormatW()
+	{
+		TextFormatter<Integer> formatter = new TextFormatter<>(
+			    new IntegerStringConverter(), // Standard converter form JavaFX
+			    1920, 
+			    new IntegerFilter());
+
+		
+		Wfeild.setTextFormatter(formatter);
+	}
+	
+	@FXML public void FormatH()
+	{
+
+		TextFormatter<Integer> formatter = new TextFormatter<>(
+			    new IntegerStringConverter(), // Standard converter form JavaFX
+			    1080, 
+			    new IntegerFilter());
+
+		Hfeild.setTextFormatter(formatter);
+	}
+	
 	public void launchPSO() throws Exception{
+		IntegerStringConverter conv = new IntegerStringConverter();
+		WIDTH =  Math.abs(conv.fromString(Wfeild.getText()));
+		HEIGHT =  Math.abs(conv.fromString(Wfeild.getText()));
+		
 		 Stage primaryStage = new Stage();
 		 primaryStage.setTitle("My New Stage Title");
 //		MapFunc map = new MapFunc(600, 400, FUNCTION, 0,60,0,40);
@@ -112,6 +149,7 @@ public class MainFrameController {
 		primaryStage.setScene(scene);
 		primaryStage.setHeight(HEIGHT);
 		primaryStage.setWidth(WIDTH);
+		primaryStage.setResizable(false);
 		primaryStage.show();
 	}
 
@@ -124,9 +162,19 @@ public class MainFrameController {
 //	@FXML public Button bout;
 
 	@FXML protected void handleSubmitButtonAction(ActionEvent event) throws Exception {
-		System.out.println("blblbl");
-//		bout.setText("lblblblb");
-		launchPSO();
+//		System.out.println("blblbl");
+////		bout.setText("lblblblb");
+//		launchPSO();
        
     }
+	public class IntegerFilter implements UnaryOperator<TextFormatter.Change> {
+	    private final Pattern DIGIT_PATTERN = Pattern.compile("\\d*");
+
+	    @Override
+	    public Change apply(TextFormatter.Change aT) {
+	        return DIGIT_PATTERN.matcher(aT.getText()).matches() ? aT : null;
+	    }
+	}
 }
+
+
