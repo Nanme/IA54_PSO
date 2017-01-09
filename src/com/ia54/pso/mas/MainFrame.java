@@ -96,7 +96,7 @@ public class MainFrame extends Application {
 //		 controller = loader.getController();
 //		 controller.MF = this;
 		 
-		 primaryStage.setTitle("Test FXML");
+		 primaryStage.setTitle("Parametres");
 		 primaryStage.show();
 
 //		 launchPSO();
